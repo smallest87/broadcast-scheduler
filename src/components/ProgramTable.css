@@ -1,18 +1,20 @@
 /* src/components/ProgramTable.css */
 
-#tableWrapper {
-    position: relative; /* Penting untuk posisi absolut realTimeIndicator */
+/* --- GAYA GLASSMORPHIISM (DEFAULT) --- */
+/* Gaya ini berlaku ketika elemen body TIDAK memiliki kelas 'light-theme' atau 'dark-theme' */
+
+body:not(.light-theme):not(.dark-theme) #tableWrapper { /* NEW: Tambahkan :not(.dark-theme) */
+    position: relative;
     overflow-x: auto;
     padding-bottom: 5px;
-    /* Tidak ada border di sini karena baris akan memiliki border mereka sendiri */
 }
 
-#programTable {
+body:not(.light-theme):not(.dark-theme) #programTable { /* NEW: Tambahkan :not(.dark-theme) */
     display: flex;
     flex-direction: column;
-    width: calc(100% - 40px); /* Ambil 100% lebar layar, kurangi margin body 20px kiri+kanan */
-    max-width: 1024px; /* Opsional: Batasi lebar maksimum agar tidak terlalu lebar di layar besar */
-    margin: 20px auto; /* Pusatkan tabel di tengah halaman */
+    width: calc(100% - 40px);
+    max-width: 1024px;
+    margin: 20px auto;
     padding: 15px;
     background-color: rgba(255, 255, 255, 0.1);
     border-radius: 15px;
@@ -20,22 +22,22 @@
     -webkit-backdrop-filter: blur(5px);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     border: 1px solid rgba(255, 255, 255, 0.3);
-    box-sizing: border-box; /* Pastikan padding tidak menambah lebar */
+    box-sizing: border-box;
 }
 
-.program-header {
+body:not(.light-theme):not(.dark-theme) .program-header { /* NEW: Tambahkan :not(.dark-theme) */
     display: flex;
     flex-direction: column;
     margin-bottom: 10px;
 }
 
-.program-body {
+body:not(.light-theme):not(.dark-theme) .program-body { /* NEW: Tambahkan :not(.dark-theme) */
     display: flex;
     flex-direction: column;
-    gap: 10px; /* Jarak antar baris */
+    gap: 10px;
 }
 
-.program-row {
+body:not(.light-theme):not(.dark-theme) .program-row { /* NEW: Tambahkan :not(.dark-theme) */
     display: flex;
     border-radius: 10px;
     background: rgba(255, 255, 255, 0.15);
@@ -44,96 +46,88 @@
     border: 1px solid rgba(255, 255, 255, 0.4);
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
-    color: #333; /* Warna teks utama untuk baris data */
+    color: #333;
     
-    align-items: stretch; /* Memastikan semua cell dalam baris memiliki tinggi yang sama */
-    min-height: 40px; /* Tinggi minimal untuk setiap baris */
-    cursor: grab; /* Kursor 'grab' untuk menunjukkan dapat di-drag */
-    overflow: hidden; /* Sembunyikan konten yang meluap dari baris */
+    align-items: stretch;
+    min-height: 40px;
+    cursor: grab;
+    overflow: hidden;
     
-    /* Properti Flex item untuk peregangan */
-    flex-shrink: 1; /* Izinkan baris untuk menyusut */
-    flex-grow: 1; /* Izinkan baris untuk tumbuh mengisi lebar parent */
+    flex-shrink: 1;
+    flex-grow: 1;
     
     transition: transform 0.3s ease-in-out, box-shadow 0.2s ease; 
-    will-change: transform; /* Hint untuk optimasi animasi browser */
+    will-change: transform;
 }
 
-.program-row:hover {
-    transform: translateY(-2px); /* Efek sedikit naik saat hover */
-    box-shadow: 0 6px 20px rgba(0,0,0,0.15); /* Bayangan lebih besar saat hover */
+body:not(.light-theme):not(.dark-theme) .program-row:hover { /* NEW: Tambahkan :not(.dark-theme) */
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
 }
 
-.program-row:active {
-    cursor: grabbing; /* Kursor 'grabbing' saat sedang di-drag */
+body:not(.light-theme):not(.dark-theme) .program-row:active { /* NEW: Tambahkan :not(.dark-theme) */
+    cursor: grabbing;
 }
 
-.program-header .program-row {
-    background: rgba(255, 255, 255, 0.25); /* Background yang sedikit berbeda untuk header */
+body:not(.light-theme):not(.dark-theme) .program-header .program-row { /* NEW: Tambahkan :not(.dark-theme) */
+    background: rgba(255, 255, 255, 0.25);
     border-bottom: 1px solid rgba(255, 255, 255, 0.5);
     box-shadow: none;
     border-radius: 10px;
-    cursor: default; /* Kursor default untuk header (tidak bisa di-drag) */
-    color: #1a1a1a; /* Warna teks lebih gelap untuk header */
+    cursor: default;
+    color: #1a1a1a;
     font-weight: bold;
     text-shadow: none;
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
 }
 
-.program-cell {
+body:not(.light-theme):not(.dark-theme) .program-cell { /* NEW: Tambahkan :not(.dark-theme) */
     padding: 8px;
-    border-right: 1px solid rgba(255, 255, 255, 0.3); /* Pemisah vertikal antar cell */
+    border-right: 1px solid rgba(255, 255, 255, 0.3); 
     display: flex;
-    align-items: center; /* Pusatkan teks vertikal di dalam cell */
-    overflow: hidden; /* Sembunyikan konten yang meluap secara default */
-    text-overflow: ellipsis; /* Tambahkan elipsis jika teks terpotong */
-    white-space: nowrap; /* Paksa teks dalam satu baris secara default */
+    align-items: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
     box-sizing: border-box;
 }
 
-.program-cell:last-child {
-    border-right: none; /* Hapus border kanan untuk cell terakhir */
+body:not(.light-theme):not(.dark-theme) .program-cell:last-child { /* NEW: Tambahkan :not(.dark-theme) */
+    border-right: none;
     box-shadow: none;
 }
-.program-header .program-cell {
-    border-right: 1px solid rgba(255, 255, 255, 0.4); /* Border header sedikit lebih gelap */
+body:not(.light-theme):not(.dark-theme) .program-header .program-cell { /* NEW: Tambahkan :not(.dark-theme) */
+    border-right: 1px solid rgba(255, 255, 255, 0.4);
 }
-.program-header .program-cell:last-child {
+body:not(.light-theme):not(.dark-theme) .program-header .program-cell:last-child { /* NEW: Tambahkan :not(.dark-theme) */
     border-right: none;
 }
 
-/* Lebar kolom menggunakan flex-basis - ini mendefinisikan lebar konten dasar */
-.program-cell.rundown-col {
-    flex-basis: 80px;
-    flex-shrink: 0; /* Jangan biarkan kolom ini menyusut */
+body:not(.light-theme):not(.dark-theme) .program-cell.rundown-col { /* NEW: Tambahkan :not(.dark-theme) */
+    flex: 0 0 80px;
     text-align: center;
-    justify-content: center; /* Pusatkan konten horizontal */
+    justify-content: center;
 }
-.program-cell.duration-col {
-    flex-basis: 70px;
-    flex-shrink: 0; /* Jangan biarkan kolom ini menyusut */
+body:not(.light-theme):not(.dark-theme) .program-cell.duration-col { /* NEW: Tambahkan :not(.dark-theme) */
+    flex: 0 0 70px;
     text-align: center;
-    justify-content: center; /* Pusatkan konten horizontal */
+    justify-content: center;
 }
-.program-cell.segment-col {
-    flex-grow: 1;
-    flex-shrink: 1;
+body:not(.light-theme):not(.dark-theme) .program-cell.segment-col { /* NEW: Tambahkan :not(.dark-theme) */
+    flex: 1;
     white-space: normal;
     text-overflow: unset;
     word-break: break-word;
-    /* --- PERUBAHAN DI SINI UNTUK RATA TENGAH VERTIKAL --- */
-    align-items: center; /* Mengubah dari flex-start menjadi center */
+    align-items: center;
 }
-.program-cell.type-col {
-    flex-basis: 80px;
-    flex-shrink: 0; /* Jangan biarkan kolom ini menyusut */
+body:not(.light-theme):not(.dark-theme) .program-cell.type-col { /* NEW: Tambahkan :not(.dark-theme) */
+    flex: 0 0 80px;
     text-align: left;
-    justify-content: flex-start; /* Rata kiri konten */
+    justify-content: flex-start;
 }
 
-/* Styles yang digunakan oleh SortableJS untuk animasi dan feedback visual */
-.sortable-ghost-custom {
+body:not(.light-theme):not(.dark-theme) .sortable-ghost-custom { /* NEW: Tambahkan :not(.dark-theme) */
     opacity: 0.2;
     background: rgba(170, 221, 255, 0.5);
     border: 1px dashed rgba(0, 123, 255, 0.6);
@@ -142,32 +136,32 @@
     box-shadow: none;
 }
 
-.sortable-drag {
+body:not(.light-theme):not(.dark-theme) .sortable-drag { /* NEW: Tambahkan :not(.dark-theme) */
     opacity: 0.9;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
     transform: scale(1.03);
     z-index: 1000;
 }
 
-.sortable-chosen {
+body:not(.light-theme):not(.dark-theme) .sortable-chosen { /* NEW: Tambahkan :not(.dark-theme) */
     opacity: 1;
     background: rgba(230, 247, 255, 0.8);
 }
 
-.program-row.live-segment {
-    background: rgba(255, 0, 0, 0.2); /* Latar belakang merah muda untuk segmen 'LIVE' */
-    border: 1px solid rgba(255, 0, 0, 0.5); /* Border merah untuk segmen 'LIVE' */
-    box-shadow: 0 4px 15px rgba(255, 0, 0, 0.15); /* Bayangan sedikit merah */
+body:not(.light-theme):not(.dark-theme) .program-row.live-segment { /* NEW: Tambahkan :not(.dark-theme) */
+    background: rgba(255, 0, 0, 0.2);
+    border: 1px solid rgba(255, 0, 0, 0.5);
+    box-shadow: 0 4px 15px rgba(255, 0, 0, 0.15);
 }
 
-.blinking-circle {
+body:not(.light-theme):not(.dark-theme) .blinking-circle { /* NEW: Tambahkan :not(.dark-theme) */
     display: inline-block;
     width: 9px;
     height: 9px;
     background-color: #ff3333;
     border-radius: 50%;
     margin-left: 7px;
-    animation: blink 1s infinite alternate; /* Animasi berkedip */
+    animation: blink 1s infinite alternate;
     box-shadow: 0 0 5px #ff3333;
 }
 
@@ -176,19 +170,203 @@
     100% { opacity: 0.5; }
 }
 
-.program-cell.editable-cell {
-    cursor: pointer; /* Kursor pointer untuk cell yang bisa diedit */
+body:not(.light-theme):not(.dark-theme) .program-cell.editable-cell { /* NEW: Tambahkan :not(.dark-theme) */
+    cursor: pointer;
 }
-.program-cell.editable-cell input {
+body:not(.light-theme):not(.dark-theme) .program-cell.editable-cell input { /* NEW: Tambahkan :not(.dark-theme) */
     width: 100%;
     height: 100%;
     box-sizing: border-box;
-    border: 1px solid #007bff; /* Border biru saat dalam mode edit */
+    border: 1px solid #007bff;
     padding: 4px;
-    font-size: inherit; /* Warisi ukuran font dari parent */
-    font-family: inherit; /* Warisi font family dari parent */
-    text-align: inherit; /* Warisi alignment teks dari parent */
-    background: rgba(255, 255, 255, 0.5); /* Background transparan untuk input */
+    font-size: inherit;
+    font-family: inherit;
+    text-align: inherit;
+    background: rgba(255, 255, 255, 0.5);
     border-radius: 5px;
     box-shadow: inset 0 1px 3px rgba(0,0,0,0.2);
+}
+
+/* --- GAYA TEMA LIGHT & CLEAN --- */
+/* Gaya ini berlaku ketika elemen body memiliki kelas 'light-theme' */
+
+body.light-theme #tableWrapper {
+    position: relative;
+    overflow-x: auto;
+    padding-bottom: 5px;
+}
+
+body.light-theme #programTable {
+    display: flex;
+    flex-direction: column;
+    width: calc(100% - 40px);
+    max-width: 1024px;
+    margin: 20px auto;
+    padding: 15px;
+    background-color: #ffffff;
+    /* box-shadow: DIHAPUS */
+    border: 1px solid #e0e0e0;
+    /* border-radius: DIHAPUS */
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    box-sizing: border-box;
+}
+
+body.light-theme .program-header {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+}
+
+body.light-theme .program-body {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+body.light-theme .program-row {
+    display: flex;
+    align-items: stretch;
+    min-height: 40px;
+    overflow: hidden;
+    flex-shrink: 1;
+    flex-grow: 1;
+    cursor: grab;
+
+    background: #f8f8f8;
+    border: 1px solid #e0e0e0;
+    /* border-radius: DIHAPUS */
+    /* box-shadow: DIHAPUS */
+    text-shadow: none;
+    color: #444;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    transition: transform 0.3s ease-in-out, background-color 0.2s ease;
+}
+
+body.light-theme .program-row:hover {
+    background-color: #f0f0f0;
+    transform: none; /* Menghilangkan efek geser (translateY) saat hover */
+    /* box-shadow: DIHAPUS */
+}
+
+body.light-theme .program-header .program-row {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+
+    background: #e9e9e9;
+    border-bottom: 1px solid #d0d0d0;
+    /* box-shadow: DIHAPUS */
+    /* border-radius: DIHAPUS */
+    cursor: default;
+    color: #333;
+    font-weight: bold;
+    text-shadow: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+}
+
+body.light-theme .program-cell {
+    padding: 8px;
+    border-right: 1px solid #d0d0d0;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    box-sizing: border-box;
+}
+
+body.light-theme .program-cell:last-child {
+    border-right: none;
+    /* box-shadow: DIHAPUS */
+}
+body.light-theme .program-header .program-cell {
+    border-right: 1px solid #c0c0c0;
+}
+body.light-theme .program-header .program-cell:last-child {
+    border-right: none;
+}
+
+body.light-theme .program-cell.rundown-col {
+    flex: 0 0 80px;
+    text-align: center;
+    justify-content: center;
+}
+body.light-theme .program-cell.duration-col {
+    flex: 0 0 70px;
+    text-align: center;
+    justify-content: center;
+}
+body.light-theme .program-cell.segment-col {
+    flex: 1;
+    white-space: normal;
+    text-overflow: unset;
+    word-break: break-word;
+    align-items: center;
+}
+body.light-theme .program-cell.type-col {
+    flex: 0 0 80px;
+    text-align: left;
+    justify-content: flex-start;
+}
+
+/* SortableJS styles */
+body.light-theme .sortable-ghost-custom {
+    opacity: 0.2;
+    background: rgba(170, 221, 255, 0.5); /* Tetap agak glassmorphism untuk ghost */
+    border: 1px dashed rgba(0, 123, 255, 0.6);
+    box-sizing: border-box;
+    /* border-radius: DIHAPUS */
+    box-shadow: none;
+}
+
+body.light-theme .sortable-drag {
+    opacity: 0.9;
+    /* box-shadow: DIHAPUS */
+    transform: scale(1.03);
+    z-index: 1000;
+}
+
+body.light-theme .sortable-chosen {
+    opacity: 1;
+    background: #e0f2ff; /* Warna solid lebih terang */
+    /* border-radius: DIHAPUS */
+}
+
+body.light-theme .program-row.live-segment {
+    background: #ffebeb;
+    border: 1px solid #ffccca;
+    /* box-shadow: DIHAPUS */
+}
+
+body.light-theme .blinking-circle {
+    display: inline-block;
+    width: 9px;
+    height: 9px;
+    background-color: #cc0000;
+    border-radius: 50%;
+    margin-left: 7px;
+    animation: blink 1s infinite alternate;
+    /* box-shadow: DIHAPUS */
+}
+
+body.light-theme .program-cell.editable-cell {
+    cursor: pointer;
+}
+body.light-theme .program-cell.editable-cell input {
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    border: 1px solid #007bff;
+    padding: 4px;
+    font-size: inherit;
+    font-family: inherit;
+    text-align: inherit;
+    background: #ffffff;
+    /* border-radius: DIHAPUS */
+    /* box-shadow: DIHAPUS */
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
 }

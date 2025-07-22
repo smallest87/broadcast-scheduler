@@ -1,0 +1,57 @@
+/* src/components/RealTimeIndicator.css */
+
+/* --- GAYA GLASSMORPHIISM (DEFAULT) --- */
+body:not(.light-theme):not(.dark-theme) .real-time-indicator-line { /* NEW: Tambahkan :not(.dark-theme) */
+    opacity: 60%;
+    position: absolute;
+    background-color: #ff3333;
+    height: 2px;
+    box-shadow: 0 0 10px rgba(255, 51, 51, 0.7), 0 0 5px rgba(255, 51, 51, 0.5);
+    z-index: 50;
+    border-radius: 1px;
+    pointer-events: none;
+    transition: top 0.5s linear;
+}
+
+body:not(.light-theme):not(.dark-theme) .time-label { /* NEW: Tambahkan :not(.dark-theme) */
+    position: absolute;
+    top: -18px;
+    left: 0;
+    background-color: #ff3333;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 5px;
+    font-size: 13px;
+    white-space: nowrap;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    transform: translateY(-50%);
+    z-index: 51;
+}
+
+/* --- GAYA TEMA DARK (CLEAN) --- */
+body.dark-theme .real-time-indicator-line {
+    opacity: 60%;
+    position: absolute;
+    background-color: #ff5555; /* Warna merah lebih terang untuk kontras di gelap */
+    height: 2px;
+    /* box-shadow: DIHAPUS */
+    z-index: 50;
+    /* border-radius: DIHAPUS */
+    pointer-events: none;
+    transition: top 0.5s linear;
+}
+
+body.dark-theme .time-label {
+    position: absolute;
+    top: -18px;
+    left: 0;
+    background-color: #ff5555; /* Warna merah lebih terang untuk kontras di gelap */
+    color: white;
+    padding: 4px 8px;
+    /* border-radius: DIHAPUS */
+    font-size: 13px;
+    white-space: nowrap;
+    /* box-shadow: DIHAPUS */
+    transform: translateY(-50%);
+    z-index: 51;
+}

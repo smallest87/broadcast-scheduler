@@ -1,0 +1,424 @@
+/* src/styles/theme-dark.css */
+
+/* --- RESET / DEFAULT UNTUK TEMA DARK --- */
+body.dark-theme {
+    background: #2c2c2c; /* Latar belakang gelap utama */
+    color: #e0e0e0; /* Teks terang default */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Hilangkan semua text-shadow dan backdrop-filter untuk tampilan clean */
+body.dark-theme h1,
+body.dark-theme h2,
+body.dark-theme h3,
+body.dark-theme h4 {
+    color: #f0f0f0; /* Warna judul lebih terang */
+    text-shadow: none;
+    text-align: center;
+}
+
+body.dark-theme p {
+    color: #c0c0c0; /* Warna teks paragraf sedikit lebih gelap dari judul */
+    text-shadow: none;
+}
+
+/* --- KONTROL UMUM (.controls) --- */
+body.dark-theme .controls {
+    /* PROPERTI TATA LETAK INTI: Pastikan konsisten */
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    padding: 15px;
+    margin-bottom: 25px;
+    max-width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+
+    /* PROPERTI VISUAL TEMA DARK: Tanpa rounded, shadow, blur */
+    background-color: #3a3a3a; /* Latar belakang kontrol gelap */
+    /* box-shadow: DIHAPUS */
+    border: 1px solid #4a4a4a; /* Border gelap */
+    /* border-radius: DIHAPUS */
+    backdrop-filter: none; /* Hilangkan efek blur */
+    -webkit-backdrop-filter: none;
+}
+
+body.dark-theme .controls label {
+    color: #d0d0d0; /* Warna label terang */
+    text-shadow: none;
+}
+
+body.dark-theme .controls button {
+    background-color: #1a73e8; /* Warna biru tombol aksi utama */
+    color: white;
+    /* box-shadow: DIHAPUS */
+    border: 1px solid #1a73e8; /* Border solid */
+    /* border-radius: DIHAPUS */
+    padding: 10px 18px; /* Pastikan padding konsisten */
+    font-size: 16px; /* Pastikan font-size konsisten */
+}
+body.dark-theme .controls button:hover {
+    background-color: #0c5bbd; /* Warna biru lebih gelap saat hover */
+    border-color: #0c5bbd;
+    /* box-shadow: DIHAPUS */
+}
+
+body.dark-theme .controls input[type="file"],
+body.dark-theme .controls input[type="time"],
+body.dark-theme .controls select {
+    /* PROPERTI TATA LETAK INTI: Pastikan konsisten */
+    padding: 8px 12px;
+    /* border-radius: DIHAPUS */
+    font-size: 16px;
+
+    /* PROPERTI VISUAL TEMA DARK: Tanpa rounded, shadow, blur */
+    background-color: #333333; /* Latar belakang input gelap */
+    border: 1px solid #555555; /* Border input gelap */
+    color: #e0e0e0; /* Teks input terang */
+    /* box-shadow: DIHAPUS */
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+}
+
+/* Sesuaikan panah dropdown untuk tema dark */
+body.dark-theme .controls select {
+    /* Pastikan appearance: none tetap di sini */
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
+
+    /* --- GAYA PANAH KUSTOM (PERBAIKAN) --- */
+    background-image: url('data:image/svg+xml;charset=UTF-8,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="%23d0d0d0"%3E%3Cpath fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"%3E%3C/path%3E%3C/svg%3E'); /* Panah lebih terang (#d0d0d0) */
+    background-repeat: no-repeat; /* Pastikan tidak berulang */
+    background-position: right 0.7em top 50%; /* Posisi di kanan tengah */
+    background-size: 1.2em auto; /* Ukuran panah */
+    padding-right: 2.5em; /* Memberi ruang untuk panah */
+    cursor: pointer;
+}
+
+body.dark-theme .controls select option {
+    background-color: #333333; /* Latar belakang opsi gelap */
+    color: #e0e0e0; /* Teks opsi terang */
+}
+
+
+/* --- GAYA TABEL PROGRAM (#programTable, .program-row, .program-cell, dll.) --- */
+
+body.dark-theme #tableWrapper {
+    position: relative;
+    overflow-x: auto;
+    padding-bottom: 5px;
+}
+
+body.dark-theme #programTable {
+    display: flex;
+    flex-direction: column;
+    width: calc(100% - 40px);
+    max-width: 1024px;
+    margin: 20px auto;
+    padding: 15px;
+
+    background-color: #333333; /* Latar belakang tabel gelap */
+    /* box-shadow: DIHAPUS */
+    border: 1px solid #555555; /* Border tabel gelap */
+    /* border-radius: DIHAPUS */
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    box-sizing: border-box;
+}
+
+body.dark-theme .program-header {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+}
+
+body.dark-theme .program-body {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+body.dark-theme .program-row {
+    display: flex;
+    align-items: stretch;
+    min-height: 40px;
+    overflow: hidden;
+    flex-shrink: 1;
+    flex-grow: 1;
+    cursor: grab;
+
+    background: #3c3c3c; /* Latar belakang baris data gelap */
+    border: 1px solid #555555; /* Border baris data gelap */
+    /* border-radius: DIHAPUS */
+    /* box-shadow: DIHAPUS */
+    text-shadow: none;
+    color: #d0d0d0; /* Teks baris data terang */
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    transition: transform 0.3s ease-in-out, background-color 0.2s ease; /* Transisi tanpa shadow */
+}
+
+body.dark-theme .program-row:hover {
+    background-color: #4a4a4a; /* Sedikit lebih terang saat hover */
+    transform: none; /* Menghilangkan efek geser (translateY) saat hover */
+    /* box-shadow: DIHAPUS */
+}
+
+body.dark-theme .program-header .program-row {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+
+    background: #4a4a4a; /* Header baris lebih gelap */
+    border-bottom: 1px solid #666666; /* Border header gelap */
+    /* box-shadow: DIHAPUS */
+    /* border-radius: DIHAPUS */
+    cursor: default;
+    color: #f0f0f0; /* Teks header terang */
+    font-weight: bold;
+    text-shadow: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+}
+
+body.dark-theme .program-cell {
+    padding: 8px;
+    border-right: 1px solid #666666; /* Pemisah vertikal antar cell gelap */
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    box-sizing: border-box;
+}
+
+body.dark-theme .program-cell:last-child {
+    border-right: none;
+    /* box-shadow: DIHAPUS */
+}
+body.dark-theme .program-header .program-cell {
+    border-right: 1px solid #777777;
+}
+body.dark-theme .program-header .program-cell:last-child {
+    border-right: none;
+}
+
+/* Lebar kolom - konsisten di semua tema */
+body.dark-theme .program-cell.rundown-col { flex: 0 0 80px; text-align: center; justify-content: center; }
+body.dark-theme .program-cell.duration-col { flex: 0 0 70px; text-align: center; justify-content: center; }
+body.dark-theme .program-cell.segment-col { flex: 1; white-space: normal; text-overflow: unset; word-break: break-word; align-items: center; }
+body.dark-theme .program-cell.type-col { flex: 0 0 80px; text-align: left; justify-content: flex-start; }
+
+/* SortableJS styles */
+/* Menggunakan latar belakang yang lebih gelap/transparan untuk tema gelap */
+body.dark-theme .sortable-ghost-custom {
+    opacity: 0.2;
+    background: rgba(80, 80, 80, 0.5); /* Agak transparan gelap */
+    border: 1px dashed rgba(150, 150, 150, 0.6);
+    box-sizing: border-box;
+    box-shadow: none; /* DIHAPUS */
+}
+
+body.dark-theme .sortable-drag {
+    opacity: 0.9;
+    /* box-shadow: DIHAPUS */
+    transform: scale(1.03);
+    z-index: 1000;
+}
+
+body.dark-theme .sortable-chosen {
+    opacity: 1;
+    background: #555555; /* Warna solid lebih terang dari background */
+}
+
+body.dark-theme .program-row.live-segment {
+    background: #400000; /* Merah gelap untuk LIVE */
+    border: 1px solid #800000; /* Merah lebih gelap */
+    /* box-shadow: DIHAPUS */
+}
+
+body.dark-theme .blinking-circle {
+    background-color: #ff3333; /* Warna merah terang untuk kontras */
+    /* box-shadow: DIHAPUS */
+}
+
+body.dark-theme .program-cell.editable-cell {
+    cursor: pointer;
+}
+body.dark-theme .program-cell.editable-cell input {
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    border: 1px solid #1a73e8; /* Border biru untuk edit */
+    padding: 4px;
+    font-size: inherit;
+    font-family: inherit;
+    text-align: inherit;
+    background: #444444; /* Background input gelap */
+    /* border-radius: DIHAPUS */
+    /* box-shadow: DIHAPUS */
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    color: #e0e0e0; /* Teks input terang */
+}
+
+
+/* --- GAYA HALAMAN PENGATURAN (.settings-container, .settings-sidebar, dll.) --- */
+
+body.dark-theme .settings-container {
+    /* PROPERTI TATA LETAK INTI: Pastikan konsisten */
+    display: flex;
+    margin: 20px auto;
+    max-width: 1024px;
+    min-height: 500px;
+    overflow: hidden;
+
+    /* PROPERTI VISUAL TEMA DARK */
+    background-color: #333333;
+    /* box-shadow: DIHAPUS */
+    border: 1px solid #555555;
+    /* border-radius: DIHAPUS */
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+}
+
+body.dark-theme .settings-sidebar {
+    /* PROPERTI TATA LETAK INTI: Pastikan konsisten */
+    width: 250px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    /* PROPERTI VISUAL TEMA DARK */
+    background-color: #3a3a3a;
+    border-right: 1px solid #555555;
+}
+
+body.dark-theme .settings-sidebar h3 {
+    color: #f0f0f0;
+    text-shadow: none;
+}
+
+body.dark-theme .settings-menu-item {
+    /* PROPERTI TATA LETAK INTI: Pastikan konsisten */
+    padding: 12px 15px;
+    /* border-radius: DIHAPUS */
+    display: block;
+    font-weight: bold;
+
+    /* PROPERTI VISUAL TEMA DARK */
+    color: #d0d0d0;
+    text-decoration: none;
+    text-shadow: none;
+    transition: background-color 0.3s ease;
+}
+
+body.dark-theme .settings-menu-item:hover {
+    background-color: #4a4a4a;
+    transform: none;
+}
+
+body.dark-theme .settings-menu-item.active {
+    background-color: #555555;
+    /* box-shadow: DIHAPUS */
+}
+
+body.dark-theme .settings-content {
+    /* PROPERTI TATA LETAK INTI: Pastikan konsisten */
+    flex-grow: 1;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    /* PROPERTI VISUAL TEMA DARK */
+    background-color: #2c2c2c;
+}
+
+body.dark-theme .settings-content h4 {
+    color: #f0f0f0;
+    text-shadow: none;
+    text-align: center;
+    width: 100%;
+}
+
+body.dark-theme .settings-input-group {
+    /* PROPERTI TATA LETAK INTI: Pastikan konsisten */
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 15px;
+    width: 100%;
+    box-sizing: border-box;
+
+    /* PROPERTI VISUAL TEMA DARK */
+    background-color: #3a3a3a;
+    /* border-radius: DIHAPUS */
+    border: 1px solid #555555;
+}
+
+body.dark-theme .settings-input-group label {
+    font-weight: bold;
+    color: #d0d0d0;
+    text-shadow: none;
+}
+
+body.dark-theme .settings-input-group input[type="time"],
+body.dark-theme .settings-input-group input[type="file"] {
+    /* PROPERTI TATA LETAK INTI: Pastikan konsisten */
+    padding: 8px 12px;
+    /* border-radius: DIHAPUS */
+    font-size: 16px;
+    width: 100%;
+    box-sizing: border-box;
+
+    /* PROPERTI VISUAL TEMA DARK */
+    background-color: #444444;
+    border: 1px solid #666666;
+    color: #e0e0e0;
+    /* box-shadow: DIHAPUS */
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+}
+
+body.dark-theme .settings-input-group button {
+    background-color: #1a73e8;
+    color: white;
+    /* box-shadow: DIHAPUS */
+    border: 1px solid #1a73e8;
+    /* border-radius: DIHAPUS */
+    padding: 10px 18px;
+    font-size: 16px;
+    margin-top: 10px;
+}
+
+body.dark-theme .settings-input-group button:hover {
+    background-color: #0c5bbd;
+    /* box-shadow: DIHAPUS */
+}
+
+/* Gaya untuk tombol "Kembali ke Utama" di SettingsLayout */
+body.dark-theme .settings-content a { /* Ini akan menarget Link */
+    padding: 8px 15px;
+    font-size: 14px;
+    /* border-radius: DIHAPUS */
+    display: inline-block;
+    line-height: normal;
+    align-self: flex-start;
+    margin-bottom: 20px;
+
+    background-color: #4a4a4a;
+    color: #e0e0e0;
+    /* box-shadow: DIHAPUS */
+    border: 1px solid #666666;
+}
+
+body.dark-theme .settings-content a:hover {
+    background-color: #5a5a5a;
+    /* box-shadow: DIHAPUS */
+}

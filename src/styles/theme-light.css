@@ -1,0 +1,393 @@
+/* src/styles/theme-light.css */
+
+/* --- RESET / DEFAULT UNTUK TEMA LIGHT --- */
+body.light-theme {
+    background: #f0f2f5; /* Latar belakang terang, bersih */
+    color: #333;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Hilangkan semua text-shadow dan backdrop-filter untuk tampilan clean */
+body.light-theme h1,
+body.light-theme h2,
+body.light-theme h3,
+body.light-theme h4 {
+    color: #2c3e50; /* Warna judul lebih gelap */
+    text-shadow: none;
+    text-align: center;
+}
+
+body.light-theme p {
+    color: #555;
+    text-shadow: none;
+}
+
+/* --- KONTROL UMUM (Sesuai dengan .controls di index.css) --- */
+body.light-theme .controls {
+    /* PROPERTI TATA LETAK INTI: Pastikan konsisten dengan tema glassmorphism */
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    padding: 15px;
+    margin-bottom: 25px;
+    max-width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+
+    /* PROPERTI VISUAL TEMA LIGHT: Hapus rounded, shadow, blur */
+    background-color: #ffffff; /* Latar belakang putih solid */
+    /* box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); <-- DIHAPUS */
+    border: 1px solid #e0e0e0;
+    /* border-radius: 15px; <-- DIHAPUS */
+    backdrop-filter: none; /* Hilangkan efek blur */
+    -webkit-backdrop-filter: none;
+}
+
+body.light-theme .controls label {
+    color: #555;
+    text-shadow: none;
+}
+
+body.light-theme .controls button {
+    /* PROPERTI VISUAL TEMA LIGHT: Hapus rounded, shadow */
+    background-color: #007bff;
+    color: white;
+    /* box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); <-- DIHAPUS */
+    border: 1px solid #007bff;
+    /* border-radius: 25px; <-- DIHAPUS (jika ingin sudut tajam, atau atur ke 4px untuk sedikit rounded) */
+    padding: 10px 18px;
+    font-size: 16px;
+}
+body.light-theme .controls button:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+    /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); <-- DIHAPUS */
+}
+
+body.light-theme .controls input[type="file"],
+body.light-theme .controls input[type="time"],
+body.light-theme .controls select {
+    /* PROPERTI VISUAL TEMA LIGHT: Hapus rounded, shadow, blur */
+    padding: 8px 12px;
+    /* border-radius: 8px; <-- DIHAPUS (jika ingin sudut tajam) */
+    font-size: 16px;
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    color: #333;
+    /* box-shadow: inset 0 1px 3px rgba(0,0,0,0.05); <-- DIHAPUS */
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+}
+
+/* Sesuaikan panah dropdown untuk tema light */
+body.light-theme .controls select {
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
+    background-image: url('data:image/svg+xml;charset=UTF-8,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="%23555"%3E%3Cpath fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"%3E%3C/path%3E%3C/svg%3E');
+    background-repeat: no-repeat;
+    background-position: right 0.7em top 50%, 0 0;
+    background-size: 1.2em auto, 100%;
+    padding-right: 2.5em;
+    cursor: pointer;
+}
+
+body.light-theme .controls select option {
+    background-color: #ffffff;
+    color: #333;
+}
+
+
+/* --- GAYA TABEL PROGRAM (.programTable, .program-row, .program-cell, dll.) --- */
+
+body.light-theme #tableWrapper {
+    /* PROPERTI TATA LETAK INTI: Pastikan konsisten */
+    position: relative;
+    overflow-x: auto;
+    padding-bottom: 5px;
+}
+
+body.light-theme #programTable {
+    /* PROPERTI TATA LETAK INTI: Pastikan konsisten */
+    display: flex;
+    flex-direction: column;
+    width: calc(100% - 40px);
+    max-width: 1024px;
+    margin: 20px auto;
+    padding: 15px;
+
+    /* PROPERTI VISUAL TEMA LIGHT: Hapus rounded, shadow, blur */
+    background-color: #ffffff;
+    /* box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); <-- DIHAPUS */
+    border: 1px solid #e0e0e0;
+    /* border-radius: 15px; <-- DIHAPUS */
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    box-sizing: border-box;
+}
+
+body.light-theme .program-header {
+    /* PROPERTI TATA LETAK INTI: Pastikan konsisten */
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+}
+
+body.light-theme .program-body {
+    /* PROPERTI TATA LETAK INTI: Pastikan konsisten */
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+body.light-theme .program-row {
+    /* PROPERTI TATA LETAK INTI: Pastikan konsisten */
+    display: flex;
+    align-items: stretch;
+    min-height: 40px;
+    overflow: hidden;
+    flex-shrink: 1;
+    flex-grow: 1;
+    cursor: grab;
+
+    /* PROPERTI VISUAL TEMA LIGHT: Hapus rounded, shadow, blur */
+    background: #f8f8f8;
+    border: 1px solid #e0e0e0;
+    /* border-radius: 10px; <-- DIHAPUS */
+    /* box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05); <-- DIHAPUS */
+    text-shadow: none;
+    color: #444;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    transition: transform 0.3s ease-in-out, background-color 0.2s ease; /* Hapus box-shadow dari transisi */
+}
+
+body.light-theme .program-row:hover {
+    background-color: #f0f0f0;
+    transform: translateY(-2px);
+    /* box-shadow: 0 4px 10px rgba(0,0,0,0.1); <-- DIHAPUS */
+}
+
+body.light-theme .program-header .program-row {
+    /* PROPERTI TATA LETAK INTI: Pastikan konsisten */
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+
+    /* PROPERTI VISUAL TEMA LIGHT: Hapus rounded, shadow, blur */
+    background: #e9e9e9;
+    border-bottom: 1px solid #d0d0d0;
+    /* box-shadow: none; <-- DIHAPUS (karena memang tidak ada shadow di header) */
+    /* border-radius: 10px; <-- DIHAPUS */
+    cursor: default;
+    color: #333;
+    font-weight: bold;
+    text-shadow: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+}
+
+body.light-theme .program-cell {
+    /* PROPERTI TATA LETAK INTI: Pastikan konsisten */
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    box-sizing: border-box;
+
+    /* PROPERTI VISUAL TEMA LIGHT */
+    border-right: 1px solid #d0d0d0;
+}
+
+body.light-theme .program-cell:last-child {
+    border-right: none;
+    /* box-shadow: none; <-- DIHAPUS (karena memang tidak ada shadow di cell ini) */
+}
+body.light-theme .program-header .program-cell {
+    border-right: 1px solid #c0c0c0;
+}
+body.light-theme .program-header .program-cell:last-child {
+    border-right: none;
+}
+
+/* SortableJS styles - ini harus tetap di ProgramTable.css (default) */
+/* Karena ini adalah efek visual untuk drag and drop, bukan perubahan tema */
+/* Anda bisa menambahkan selector body.light-theme di sini jika ingin mengubah gaya Sortable di tema light */
+/* Namun, untuk tujuan menghilangkan gaya "memberatkan", kita akan memastikan ini tidak aktif di tema light */
+
+/* Gaya untuk segmen LIVE pada tema light */
+body.light-theme .program-row.live-segment {
+    background: #ffebeb;
+    border: 1px solid #ffccca;
+    /* box-shadow: 0 4px 15px rgba(255, 150, 150, 0.1); <-- DIHAPUS */
+}
+
+body.light-theme .blinking-circle {
+    background-color: #cc0000;
+    /* box-shadow: 0 0 5px #cc0000; <-- DIHAPUS */
+}
+
+
+/* --- GAYA HALAMAN PENGATURAN (.settings-container, .settings-sidebar, dll.) --- */
+
+body.light-theme .settings-container {
+    /* PROPERTI TATA LETAK INTI: Pastikan konsisten */
+    display: flex;
+    margin: 20px auto;
+    max-width: 1024px;
+    min-height: 500px;
+    overflow: hidden;
+
+    /* PROPERTI VISUAL TEMA LIGHT: Hapus rounded, shadow, blur */
+    background-color: #ffffff;
+    /* box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); <-- DIHAPUS */
+    border: 1px solid #e0e0e0;
+    /* border-radius: 15px; <-- DIHAPUS */
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+}
+
+body.light-theme .settings-sidebar {
+    /* PROPERTI TATA LETAK INTI: Pastikan konsisten */
+    width: 250px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    /* PROPERTI VISUAL TEMA LIGHT */
+    background-color: #f8f8f8;
+    border-right: 1px solid #e0e0e0;
+}
+
+body.light-theme .settings-sidebar h3 {
+    color: #2c3e50;
+    text-shadow: none;
+}
+
+body.light-theme .settings-menu-item {
+    /* PROPERTI TATA LETAK INTI: Pastikan konsisten */
+    padding: 12px 15px;
+    /* border-radius: 8px; <-- DIHAPUS */
+    display: block;
+    font-weight: bold;
+
+    /* PROPERTI VISUAL TEMA LIGHT */
+    color: #555;
+    text-decoration: none;
+    text-shadow: none;
+    transition: background-color 0.3s ease; /* Hapus transform */
+}
+
+body.light-theme .settings-menu-item:hover {
+    background-color: #f0f0f0;
+    transform: none; /* Hilangkan transform */
+}
+
+body.light-theme .settings-menu-item.active {
+    background-color: #e5e5e5;
+    /* box-shadow: inset 0 1px 3px rgba(0,0,0,0.05); <-- DIHAPUS */
+}
+
+body.light-theme .settings-content {
+    /* PROPERTI TATA LETAK INTI: Pastikan konsisten */
+    flex-grow: 1;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    /* PROPERTI VISUAL TEMA LIGHT */
+    background-color: #ffffff;
+}
+
+body.light-theme .settings-content h4 {
+    color: #2c3e50;
+    text-shadow: none;
+    text-align: center;
+    width: 100%;
+}
+
+body.light-theme .settings-input-group {
+    /* PROPERTI TATA LETAK INTI: Pastikan konsisten */
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 15px;
+    width: 100%;
+    box-sizing: border-box;
+
+    /* PROPERTI VISUAL TEMA LIGHT */
+    background-color: #f5f5f5;
+    /* border-radius: 10px; <-- DIHAPUS */
+    border: 1px solid #e0e0e0;
+}
+
+body.light-theme .settings-input-group label {
+    font-weight: bold;
+    color: #555;
+    text-shadow: none;
+}
+
+body.light-theme .settings-input-group input[type="time"],
+body.light-theme .settings-input-group input[type="file"] {
+    /* PROPERTI TATA LETAK INTI: Pastikan konsisten */
+    padding: 8px 12px;
+    /* border-radius: 8px; <-- DIHAPUS */
+    font-size: 16px;
+    width: 100%;
+    box-sizing: border-box;
+
+    /* PROPERTI VISUAL TEMA LIGHT */
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+    color: #333;
+    /* box-shadow: inset 0 1px 3px rgba(0,0,0,0.05); <-- DIHAPUS */
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+}
+
+body.light-theme .settings-input-group button {
+    /* PROPERTI VISUAL TEMA LIGHT */
+    background-color: #007bff;
+    color: white;
+    /* box-shadow: 0 2px 5px rgba(0,0,0,0.1); <-- DIHAPUS */
+    border: 1px solid #007bff;
+    /* border-radius: 25px; <-- DIHAPUS */
+    padding: 10px 18px;
+    font-size: 16px;
+    margin-top: 10px;
+}
+
+body.light-theme .settings-input-group button:hover {
+    background-color: #0056b3;
+    /* box-shadow: 0 4px 8px rgba(0,0,0,0.15); <-- DIHAPUS */
+}
+
+/* Gaya untuk tombol "Kembali ke Utama" di SettingsLayout */
+body.light-theme .settings-content a { /* Ini akan menarget Link */
+    /* PROPERTI TATA LETAK INTI: Pastikan konsisten */
+    padding: 8px 15px;
+    font-size: 14px;
+    /* border-radius: 20px; <-- DIHAPUS */
+    display: inline-block;
+    line-height: normal;
+    align-self: flex-start;
+    margin-bottom: 20px;
+
+    /* PROPERTI VISUAL TEMA LIGHT */
+    background-color: #e0e0e0;
+    color: #555;
+    /* box-shadow: 0 2px 5px rgba(0,0,0,0.1); <-- DIHAPUS */
+    border: 1px solid #ccc; /* Border solid */
+}
+
+body.light-theme .settings-content a:hover {
+    background-color: #d0d0d0;
+    /* box-shadow: 0 3px 6px rgba(0,0,0,0.15); <-- DIHAPUS */
+}

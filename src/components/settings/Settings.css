@@ -1,0 +1,291 @@
+/* src/components/settings/Settings.css */
+
+/* --- GAYA GLASSMORPHIISM (DEFAULT) --- */
+body:not(.light-theme):not(.dark-theme) .settings-container { /* NEW: Tambahkan :not(.dark-theme) */
+    display: flex;
+    margin: 20px auto;
+    max-width: 1024px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    min-height: 500px;
+    overflow: hidden;
+}
+
+body:not(.light-theme):not(.dark-theme) .settings-sidebar { /* NEW: Tambahkan :not(.dark-theme) */
+    width: 250px;
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.15);
+    border-right: 1px solid rgba(255, 255, 255, 0.2);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+body:not(.light-theme):not(.dark-theme) .settings-sidebar h3 { /* NEW: Tambahkan :not(.dark-theme) */
+    color: #212529;
+    text-shadow: 1px 1px 2px rgba(255,255,255,0.7);
+    margin-top: 0;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+body:not(.light-theme):not(.dark-theme) .settings-menu-item { /* NEW: Tambahkan :not(.dark-theme) */
+    padding: 12px 15px;
+    border-radius: 8px;
+    color: #333;
+    text-decoration: none;
+    transition: background-color 0.3s ease, transform 0.1s ease;
+    display: block;
+    font-weight: bold;
+    text-shadow: 0 0 2px rgba(255,255,255,0.5);
+}
+
+body:not(.light-theme):not(.dark-theme) .settings-menu-item:hover { /* NEW: Tambahkan :not(.dark-theme) */
+    background-color: rgba(255, 255, 255, 0.3);
+    transform: translateX(3px);
+}
+
+body:not(.light-theme):not(.dark-theme) .settings-menu-item.active { /* NEW: Tambahkan :not(.dark-theme) */
+    background-color: rgba(255, 255, 255, 0.4);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+body:not(.light-theme):not(.dark-theme) .settings-content { /* NEW: Tambahkan :not(.dark-theme) */
+    flex-grow: 1;
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.05);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+body:not(.light-theme):not(.dark-theme) .settings-content h4 { /* NEW: Tambahkan :not(.dark-theme) */
+    color: #212529;
+    text-shadow: 1px 1px 2px rgba(255,255,255,0.7);
+    margin-top: 0;
+    margin-bottom: 20px;
+    text-align: center;
+    width: 100%;
+}
+
+body:not(.light-theme):not(.dark-theme) .settings-input-group { /* NEW: Tambahkan :not(.dark-theme) */
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 15px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    width: 100%;
+    box-sizing: border-box;
+}
+
+body:not(.light-theme):not(.dark-theme) .settings-input-group label { /* NEW: Tambahkan :not(.dark-theme) */
+    font-weight: bold;
+    color: #333;
+    text-shadow: 0 0 2px rgba(255, 255, 255, 0.5);
+}
+
+body:not(.light-theme):not(.dark-theme) .settings-input-group input[type="time"], /* NEW: Tambahkan :not(.dark-theme) */
+body:not(.light-theme):not(.dark-theme) .settings-input-group input[type="file"] { /* NEW: Tambahkan :not(.dark-theme) */
+    padding: 8px 12px;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 8px;
+    background-color: rgba(255, 255, 255, 0.2);
+    color: #333;
+    font-size: 16px;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+    width: 100%;
+    box-sizing: border-box;
+}
+
+body:not(.light-theme):not(.dark-theme) .settings-input-group button { /* NEW: Tambahkan :not(.dark-theme) */
+    padding: 10px 18px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    margin-top: 10px;
+}
+
+body:not(.light-theme):not(.dark-theme) .settings-input-group button:hover { /* NEW: Tambahkan :not(.dark-theme) */
+    background-color: #0056b3;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.25);
+}
+
+/* Gaya untuk tombol "Kembali ke Utama" di SettingsLayout */
+body:not(.light-theme):not(.dark-theme) .settings-content a { /* NEW: Tambahkan :not(.dark-theme) */
+    padding: 8px 15px;
+    font-size: 14px;
+    border-radius: 20px;
+    display: inline-block;
+    line-height: normal;
+    align-self: flex-start;
+    margin-bottom: 20px;
+    background-color: #6c757d;
+    color: white;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+    border: none;
+}
+body:not(.light-theme):not(.dark-theme) .settings-content a:hover { /* NEW: Tambahkan :not(.dark-theme) */
+    background-color: #5a6268;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+}
+
+/* --- GAYA TEMA DARK (CLEAN) --- */
+body.dark-theme .settings-container {
+    display: flex;
+    margin: 20px auto;
+    max-width: 1024px;
+    min-height: 500px;
+    overflow: hidden;
+
+    background-color: #333333;
+    /* box-shadow: DIHAPUS */
+    border: 1px solid #555555;
+    /* border-radius: DIHAPUS */
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+}
+
+body.dark-theme .settings-sidebar {
+    width: 250px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    background-color: #3a3a3a;
+    border-right: 1px solid #555555;
+}
+
+body.dark-theme .settings-sidebar h3 {
+    color: #f0f0f0;
+    text-shadow: none;
+}
+
+body.dark-theme .settings-menu-item {
+    padding: 12px 15px;
+    /* border-radius: DIHAPUS */
+    display: block;
+    font-weight: bold;
+
+    color: #d0d0d0;
+    text-decoration: none;
+    text-shadow: none;
+    transition: background-color 0.3s ease;
+}
+
+body.dark-theme .settings-menu-item:hover {
+    background-color: #4a4a4a;
+    transform: none;
+}
+
+body.dark-theme .settings-menu-item.active {
+    background-color: #555555;
+    /* box-shadow: DIHAPUS */
+}
+
+body.dark-theme .settings-content {
+    flex-grow: 1;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    background-color: #2c2c2c;
+}
+
+body.dark-theme .settings-content h4 {
+    color: #f0f0f0;
+    text-shadow: none;
+    text-align: center;
+    width: 100%;
+}
+
+body.dark-theme .settings-input-group {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 15px;
+    width: 100%;
+    box-sizing: border-box;
+
+    background-color: #3a3a3a;
+    /* border-radius: DIHAPUS */
+    border: 1px solid #555555;
+}
+
+body.dark-theme .settings-input-group label {
+    font-weight: bold;
+    color: #d0d0d0;
+    text-shadow: none;
+}
+
+body.dark-theme .settings-input-group input[type="time"],
+body.dark-theme .settings-input-group input[type="file"] {
+    padding: 8px 12px;
+    /* border-radius: DIHAPUS */
+    font-size: 16px;
+    width: 100%;
+    box-sizing: border-box;
+
+    background-color: #444444;
+    border: 1px solid #666666;
+    color: #e0e0e0;
+    /* box-shadow: DIHAPUS */
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+}
+
+body.dark-theme .settings-input-group button {
+    background-color: #1a73e8;
+    color: white;
+    /* box-shadow: DIHAPUS */
+    border: 1px solid #1a73e8;
+    /* border-radius: DIHAPUS */
+    padding: 10px 18px;
+    font-size: 16px;
+    margin-top: 10px;
+}
+
+body.dark-theme .settings-input-group button:hover {
+    background-color: #0c5bbd;
+    /* box-shadow: DIHAPUS */
+}
+
+/* Gaya untuk tombol "Kembali ke Utama" di SettingsLayout */
+body.dark-theme .settings-content a { /* Ini akan menarget Link */
+    padding: 8px 15px;
+    font-size: 14px;
+    /* border-radius: DIHAPUS */
+    display: inline-block;
+    line-height: normal;
+    align-self: flex-start;
+    margin-bottom: 20px;
+
+    background-color: #4a4a4a;
+    color: #e0e0e0;
+    /* box-shadow: DIHAPUS */
+    border: 1px solid #666666;
+}
+
+body.dark-theme .settings-content a:hover {
+    background-color: #5a5a5a;
+    /* box-shadow: DIHAPUS */
+}

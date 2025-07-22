@@ -1,0 +1,182 @@
+#tableWrapper {
+    position: relative; /* Penting untuk posisi absolut realTimeIndicator */
+    overflow-x: auto;
+    padding-bottom: 5px;
+}
+
+#programTable {
+    display: flex;
+    flex-direction: column;
+    width: calc(100% - 40px);
+    max-width: 1024px;
+    margin: 20px auto;
+    padding: 15px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-sizing: border-box;
+}
+
+.program-header {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+}
+
+.program-body {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.program-row {
+    display: flex;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+    color: #333;
+    align-items: stretch;
+    min-height: 40px; /* Minimal height agar tidak terlalu kecil */
+    cursor: grab;
+    overflow: hidden;
+    flex-shrink: 1;
+    flex-grow: 1;
+    transition: transform 0.3s ease-in-out, box-shadow 0.2s ease;
+    will-change: transform;
+}
+
+.program-row:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+}
+
+.program-row:active {
+    cursor: grabbing;
+}
+
+.program-header .program-row {
+    background: rgba(255, 255, 255, 0.25);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow: none;
+    border-radius: 10px;
+    cursor: default;
+    color: #1a1a1a;
+    font-weight: bold;
+    text-shadow: none;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.program-cell {
+    padding: 8px;
+    border-right: 1px solid rgba(255, 255, 255, 0.3);
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    box-sizing: border-box;
+}
+
+.program-cell:last-child {
+    border-right: none;
+    box-shadow: none;
+}
+.program-header .program-cell {
+    border-right: 1px solid rgba(255, 255, 255, 0.4);
+}
+.program-header .program-cell:last-child {
+    border-right: none;
+}
+
+/* Column widths using flex-basis - these define the base content width */
+.program-cell.rundown-col {
+    flex-basis: 80px;
+    flex-shrink: 0;
+    text-align: center;
+    justify-content: center;
+}
+.program-cell.duration-col {
+    flex-basis: 70px;
+    flex-shrink: 0;
+    text-align: center;
+    justify-content: center;
+}
+.program-cell.segment-col {
+    flex-grow: 1;
+    flex-shrink: 1;
+}
+.program-cell.type-col {
+    flex-basis: 80px;
+    flex-shrink: 0;
+    text-align: left;
+    justify-content: flex-start;
+}
+
+/* Styles used by SortableJS for animation and visual feedback */
+.sortable-ghost-custom {
+    opacity: 0.2;
+    background: rgba(170, 221, 255, 0.5);
+    border: 1px dashed rgba(0, 123, 255, 0.6);
+    box-sizing: border-box;
+    border-radius: 10px;
+    box-shadow: none;
+}
+
+.sortable-drag {
+    opacity: 0.9;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    transform: scale(1.03);
+    z-index: 1000;
+}
+
+.sortable-chosen {
+    opacity: 1;
+    background: rgba(230, 247, 255, 0.8);
+}
+
+.blinking-circle {
+    display: inline-block;
+    width: 9px;
+    height: 9px;
+    background-color: #ff3333;
+    border-radius: 50%;
+    margin-left: 7px;
+    animation: blink 1s infinite alternate;
+    box-shadow: 0 0 5px #ff3333;
+}
+
+@keyframes blink {
+    0% { opacity: 1; }
+    100% { opacity: 0.5; }
+}
+
+.program-row.live-segment {
+    background: rgba(255, 0, 0, 0.2);
+    border: 1px solid rgba(255, 0, 0, 0.5);
+    box-shadow: 0 4px 15px rgba(255, 0, 0, 0.15);
+}
+
+.program-cell.editable-cell {
+    cursor: pointer;
+}
+.program-cell.editable-cell input {
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    border: 1px solid #007bff;
+    padding: 4px;
+    font-size: inherit;
+    font-family: inherit;
+    text-align: inherit;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 5px;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.2);
+}

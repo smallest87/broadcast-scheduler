@@ -1,108 +1,106 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { isValidTimeFormat } from '../utils/timeUtils.js'; // Pastikan .js
+// src/components/ProgramRow.jsx
 
-const ProgramRow = React.memo(({ item, index, onUpdateCell, baseRowHeight, BASE_HEIGHT_MINUTES }) => {
-    const [isEditing, setIsEditing] = useState(null); // Menyimpan kolom yang sedang diedit ('Durasi', 'Segmen', 'Jenis')
-    const [inputValue, setInputValue] = useState('');
-    const inputRef = useRef(null); // Ref untuk input field saat mengedit
+import React, { useState, useEffect, useRef } from 'react';
+import { timeToSeconds, secondsToTime, isValidTimeFormat } from '../utils/timeUtils.js';
 
-    // Hitung tinggi dinamis berdasarkan durasi
-    const durationInMinutes = parseFloat(item.DurationSeconds / 60); // Konversi detik ke menit
-    const calculatedHeight = (durationInMinutes / BASE_HEIGHT_MINUTES) * baseRowHeight;
-    const rowHeight = Math.max(calculatedHeight, baseRowHeight || 40); // Minimal 40px atau baseRowHeight jika 0
+const ProgramRow = ({ item, index, onUpdateCell, baseRowHeight, BASE_HEIGHT_MINUTES, viewMode }) => {
+    const [isEditing, setIsEditing] = useState(false);
+    const [editedValue, setEditedValue] = useState('');
+    const inputRef = useRef(null);
 
-    // Fokus ke input field saat mode edit aktif
-    useEffect(() => {
-        if (isEditing && inputRef.current) {
-            inputRef.current.focus();
-            inputRef.current.select();
+    // Hitung tinggi baris berdasarkan durasi item
+    const calculatedHeight = (item.DurationSeconds / (BASE_HEIGHT_MINUTES * 60)) * baseRowHeight;
+    const rowHeight = Math.max(calculatedHeight, baseRowHeight || 40);
+
+    // Cek apakah segmen ini "LIVE"
+    const isLiveSegment = item.Jenis && item.Jenis.toUpperCase() === 'LIVE';
+
+    const handleDoubleClick = (e, columnKey, initialValue) => {
+        // Hanya izinkan edit di mode Traffic Manager
+        if (viewMode === 'Traffic Manager') {
+            setIsEditing(columnKey);
+            setEditedValue(initialValue);
         }
-    }, [isEditing]);
-
-    const handleDoubleClick = (columnKey, currentValue) => {
-        setIsEditing(columnKey);
-        setInputValue(currentValue);
     };
 
     const handleBlur = () => {
         if (isEditing) {
-            let newValue = inputValue.trim();
-            let shouldUpdate = true;
-
-            if (isEditing === 'Durasi') {
-                if (!isValidTimeFormat(newValue)) {
-                    alert('Format waktu tidak valid! Harap gunakan format HH:MM:SS (contoh: 01:23:45).');
-                    shouldUpdate = false; // Jangan update jika format tidak valid
-                }
-            }
-
-            if (shouldUpdate) {
-                onUpdateCell(index, isEditing, newValue); // Panggil fungsi update dari parent
-            }
-            setIsEditing(null); // Keluar dari mode edit
+            onUpdateCell(index, isEditing, editedValue);
+            setIsEditing(false);
         }
     };
 
-    const handleKeyDown = (e) => {
+    const handleKeyPress = (e) => {
         if (e.key === 'Enter') {
-            e.preventDefault();
-            handleBlur(); // Selesai edit saat Enter
+            handleBlur();
         }
     };
 
-    // Fungsi untuk merender konten sel (teks biasa atau input field)
+    useEffect(() => {
+        if (isEditing && inputRef.current) {
+            inputRef.current.focus();
+        }
+    }, [isEditing]);
+
     const renderCellContent = (columnKey, value) => {
         if (isEditing === columnKey) {
             return (
                 <input
                     ref={inputRef}
                     type="text"
-                    value={inputValue}
-                    onChange={(e) => setInputValue(e.target.value)}
+                    value={editedValue}
+                    onChange={(e) => setEditedValue(e.target.value)}
                     onBlur={handleBlur}
-                    onKeyDown={handleKeyDown}
+                    onKeyPress={handleKeyPress}
                 />
             );
         }
-        return (
-            <>
-                {value}
-                {/* Tambahkan blinking circle hanya jika Jenis adalah LIVE */}
-                {columnKey === 'Jenis' && value && value.toUpperCase() === 'LIVE' && (
-                    <span className="blinking-circle"></span>
-                )}
-            </>
-        );
+        return value;
     };
 
     return (
         <div
-            className={`program-row ${item.Jenis && item.Jenis.toUpperCase() === 'LIVE' ? 'live-segment' : ''}`}
-            data-program-data-index={index}
-            id={`row-${index}`}
+            className={`program-row ${isLiveSegment ? 'live-segment' : ''}`}
             style={{ height: `${rowHeight}px` }}
         >
-            <div className="program-cell rundown-col">{item.Rundown || ''}</div>
+            {/* Kolom Rundown (selalu tampil) */}
             <div
-                className="program-cell duration-col editable-cell"
-                onDoubleClick={() => handleDoubleClick('Durasi', item.Durasi)}
+                className="program-cell rundown-col"
+                onDoubleClick={(e) => handleDoubleClick(e, 'Rundown', item.Rundown)}
             >
-                {renderCellContent('Durasi', item.Durasi)}
+                {renderCellContent('Rundown', item.Rundown)}
             </div>
+
+            {/* Kolom Segmen (selalu tampil) */}
             <div
                 className="program-cell segment-col editable-cell"
-                onDoubleClick={() => handleDoubleClick('Segmen', item.Segmen)}
+                onDoubleClick={(e) => handleDoubleClick(e, 'Segmen', item.Segmen)}
             >
                 {renderCellContent('Segmen', item.Segmen)}
+                {/* Hapus blinking circle dari sini */}
             </div>
-            <div
-                className="program-cell type-col editable-cell"
-                onDoubleClick={() => handleDoubleClick('Jenis', item.Jenis)}
-            >
-                {renderCellContent('Jenis', item.Jenis)}
-            </div>
+
+            {/* Conditional rendering untuk kolom Durasi dan Jenis */}
+            {viewMode === 'Traffic Manager' && (
+                <>
+                    <div
+                        className="program-cell duration-col editable-cell"
+                        onDoubleClick={(e) => handleDoubleClick(e, 'Durasi', item.Durasi)}
+                    >
+                        {renderCellContent('Durasi', item.Durasi)}
+                    </div>
+                    <div
+                        className="program-cell type-col editable-cell"
+                        onDoubleClick={(e) => handleDoubleClick(e, 'Jenis', item.Jenis)}
+                    >
+                        {renderCellContent('Jenis', item.Jenis)}
+                        {/* PERBAIKAN: Blinking circle dikembalikan ke kolom Jenis */}
+                        {isLiveSegment && <span className="blinking-circle"></span>}
+                    </div>
+                </>
+            )}
         </div>
     );
-});
+};
 
 export default ProgramRow;

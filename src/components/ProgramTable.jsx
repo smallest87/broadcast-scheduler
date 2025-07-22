@@ -1,5 +1,7 @@
+// src/components/ProgramTable.jsx
+
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import Sortable from 'sortablejs'; // Import SortableJS
+import Sortable from 'sortablejs';
 import ProgramRow from './ProgramRow.jsx';
 import RealTimeIndicator from './RealTimeIndicator.jsx';
 import { timeToSeconds, secondsToTime, isValidTimeFormat, durationToMinutes } from '../utils/timeUtils.js';
@@ -8,14 +10,15 @@ import { parseCSV, convertToCSV } from '../utils/csvUtils.js';
 import './ProgramTable.css';
 
 const BASE_HEIGHT_MINUTES = 10;
-const DEFAULT_ROW_HEIGHT_PX = 40; // Menambahkan nilai default untuk tinggi baris
+const DEFAULT_ROW_HEIGHT_PX = 40;
 
 const ProgramTable = () => {
     const [programData, setProgramData] = useState([]);
     const [dataWithRundownCache, setDataWithRundownCache] = useState([]);
     const [startTime, setStartTime] = useState('12:00:00');
-    // Set nilai awal baseRowHeight ke default yang masuk akal
     const [baseRowHeight, setBaseRowHeight] = useState(DEFAULT_ROW_HEIGHT_PX);
+    const [showExampleScheduleNote, setShowExampleScheduleNote] = useState(true);
+    const [viewMode, setViewMode] = useState('Traffic Manager'); // Default: tampilkan semua kolom
 
     const [indicatorState, setIndicatorState] = useState({
         top: null,
@@ -27,8 +30,8 @@ const ProgramTable = () => {
     const programBodyRef = useRef(null);
     const programTableRef = useRef(null);
     const tableWrapperRef = useRef(null);
+    const sortableInstanceRef = useRef(null); // NEW: Ref untuk menyimpan instance Sortable
 
-    // Effect untuk menghitung tinggi dasar baris hanya sekali saat komponen mount
     useEffect(() => {
         const calculateBaseHeight = () => {
             if (programBodyRef.current) {
@@ -39,7 +42,6 @@ const ProgramTable = () => {
                 dummyRow.style.width = '100%';
                 dummyRow.style.minWidth = 'unset';
                 dummyRow.style.padding = '0';
-                // Tambahkan konten minimal untuk memastikan tinggi terukur
                 dummyRow.innerHTML = `
                     <div class="program-cell rundown-col">00:00:00</div>
                     <div class="program-cell duration-col">00:00:00</div>
@@ -55,7 +57,6 @@ const ProgramTable = () => {
                     setBaseRowHeight(measuredHeight);
                     console.log('Base row height for 10 minutes:', measuredHeight);
                 } else {
-                    // Fallback jika pengukuran tetap 0
                     console.warn('Measured base row height is 0, using default:', DEFAULT_ROW_HEIGHT_PX);
                     setBaseRowHeight(DEFAULT_ROW_HEIGHT_PX);
                 }
@@ -65,6 +66,7 @@ const ProgramTable = () => {
         calculateBaseHeight();
 
         // Muat CSV awal
+        // Memuat file CSV 'jadwal_siaran.csv' sebagai contoh jadwal siaran
         fetch('/jadwal_siaran.csv')
             .then(response => {
                 if (!response.ok) {
@@ -73,19 +75,21 @@ const ProgramTable = () => {
                 return response.text();
             })
             .then(csvText => {
-                // Pastikan 'id' unik ditambahkan saat parsing awal
                 const parsedData = parseCSV(csvText).map((item, idx) => ({ ...item, id: `${item.Segmen}-${idx}` }));
                 setProgramData(parsedData);
+                setShowExampleScheduleNote(true);
             })
-            .catch(error => console.error('Error loading CSV:', error));
+            .catch(error => {
+                console.error('Error loading CSV:', error);
+                setShowExampleScheduleNote(false);
+            });
 
-    }, []); // Array dependensi kosong berarti efek ini hanya berjalan sekali (saat mount)
+    }, []);
 
-    // useCallback untuk menghitung rundown (memperbaiki 'index is not defined')
     const calculateRundown = useCallback((data) => {
         let currentAccumulatedSeconds = timeToSeconds(startTime);
 
-        return data.map((item, index) => { // <-- PERBAIKAN DI SINI: tambahkan 'index'
+        return data.map((item, index) => {
             const itemDurationSeconds = isValidTimeFormat(item.Durasi) ? timeToSeconds(item.Durasi) : 0;
 
             const rundownStartTime = secondsToTime(currentAccumulatedSeconds);
@@ -96,7 +100,7 @@ const ProgramTable = () => {
             const rundownEndTime = secondsToTime(rundownEndSeconds);
 
             return {
-                id: item.id || `${item.Segmen}-${index}-${Date.now()}`, // Fallback ID yang lebih robust
+                id: item.id || `${item.Segmen}-${index}-${Date.now()}`,
                 Rundown: rundownStartTime,
                 RundownStartSeconds: rundownStartSeconds,
                 RundownEnd: rundownEndTime,
@@ -107,17 +111,21 @@ const ProgramTable = () => {
                 Jenis: item.Jenis
             };
         });
-    }, [startTime]); // calculateRundown akan dibuat ulang jika startTime berubah
+    }, [startTime]);
 
-    // Effect untuk memperbarui cache rundown saat programData atau startTime berubah
     useEffect(() => {
         setDataWithRundownCache(calculateRundown(programData));
-    }, [programData, startTime, calculateRundown]); // Tambahkan calculateRundown ke dependensi
+    }, [programData, startTime, calculateRundown]);
 
-    // Effect untuk inisialisasi SortableJS
+    // NEW useEffect untuk mengontrol Sortable berdasarkan viewMode dan programData
     useEffect(() => {
-        if (programBodyRef.current) {
-            const sortable = Sortable.create(programBodyRef.current, {
+        if (sortableInstanceRef.current) {
+            sortableInstanceRef.current.destroy(); // Hancurkan instance yang ada
+            sortableInstanceRef.current = null;
+        }
+
+        if (viewMode === 'Traffic Manager' && programBodyRef.current) {
+            sortableInstanceRef.current = Sortable.create(programBodyRef.current, {
                 animation: 300,
                 ghostClass: 'sortable-ghost-custom',
                 chosenClass: 'sortable-chosen',
@@ -135,12 +143,17 @@ const ProgramTable = () => {
                     });
                 }
             });
-            // Cleanup function: hancurkan instance Sortable saat komponen dilepas atau sebelum re-render
-            return () => sortable.destroy();
         }
-    }, [programData]); // `programData` sebagai dependensi untuk memastikan Sortable diinisialisasi ulang jika item berubah
 
-    // Callback untuk memperbarui indikator waktu nyata
+        // Cleanup function: Hancurkan Sortable saat komponen unmount atau dependensi berubah
+        return () => {
+            if (sortableInstanceRef.current) {
+                sortableInstanceRef.current.destroy();
+                sortableInstanceRef.current = null;
+            }
+        };
+    }, [programData, viewMode]); // Dependensi: programData dan viewMode
+
     const updateRealTimeIndicator = useCallback(() => {
         const now = new Date();
         const currentHours = now.getHours();
@@ -155,7 +168,6 @@ const ProgramTable = () => {
         let indicatorLeft = null;
         let indicatorWidth = null;
 
-        // Pastikan semua ref DOM tersedia dan baseRowHeight sudah dihitung
         if (programTableRef.current && tableWrapperRef.current && programBodyRef.current && baseRowHeight > 0) {
             const tableWrapperRect = tableWrapperRef.current.getBoundingClientRect();
             const programTableRect = programTableRef.current.getBoundingClientRect();
@@ -184,7 +196,6 @@ const ProgramTable = () => {
             }
         }
 
-        // Perbarui state indikator
         setIndicatorState({
             top: indicatorTop,
             left: indicatorLeft,
@@ -193,14 +204,11 @@ const ProgramTable = () => {
         });
 
         requestAnimationFrame(updateRealTimeIndicator);
-    }, [dataWithRundownCache, baseRowHeight]); // Dependensi untuk updateRealTimeIndicator
+    }, [dataWithRundownCache, baseRowHeight]);
 
-    // Efek untuk memulai loop `requestAnimationFrame`
     useEffect(() => {
         requestAnimationFrame(updateRealTimeIndicator);
-    }, [updateRealTimeIndicator]); // Efek ini hanya akan berjalan sekali saat updateRealTimeIndicator pertama kali dibuat
-
-    // ... (handler lainnya tetap sama) ...
+    }, [updateRealTimeIndicator]);
 
     const handleCsvFileUpload = (event) => {
         const file = event.target.files[0];
@@ -210,6 +218,7 @@ const ProgramTable = () => {
                 const csvText = e.target.result;
                 const parsedData = parseCSV(csvText).map((item, idx) => ({ ...item, id: `${item.Segmen}-${idx}` }));
                 setProgramData(parsedData);
+                setShowExampleScheduleNote(false);
             };
             reader.readAsText(file);
         }
@@ -253,11 +262,27 @@ const ProgramTable = () => {
         });
     }, []);
 
+    // Handler untuk perubahan dropdown
+    const handleViewModeChange = (event) => {
+        setViewMode(event.target.value);
+    };
+
     return (
         <div>
             <h1>Jadwal Acara</h1>
+            {showExampleScheduleNote && (
+                <p style={{ textAlign: 'center', color: '#495057', fontSize: '1.1em', marginTop: '-15px', marginBottom: '20px', textShadow: '0 0 2px rgba(255,255,255,0.5)' }}>
+                    Contoh Jadwal Siaran
+                </p>
+            )}
 
             <div className="controls">
+                <label htmlFor="viewModeSelect">Tampilan:</label>
+                <select id="viewModeSelect" value={viewMode} onChange={handleViewModeChange}>
+                    <option value="Subscriber">Subscriber</option>
+                    <option value="Traffic Manager">Traffic Manager</option>
+                </select>
+
                 <label htmlFor="startTimeInput">Jam Mulai:</label>
                 <input
                     type="time"
@@ -282,9 +307,14 @@ const ProgramTable = () => {
                     <div className="program-header">
                         <div className="program-row">
                             <div className="program-cell rundown-col">Rundown</div>
-                            <div className="program-cell duration-col">Durasi</div>
                             <div className="program-cell segment-col">Segmen</div>
-                            <div className="program-cell type-col">Jenis</div>
+                            {/* Conditional rendering untuk header kolom Durasi dan Jenis */}
+                            {viewMode === 'Traffic Manager' && (
+                                <>
+                                    <div className="program-cell duration-col">Durasi</div>
+                                    <div className="program-cell type-col">Jenis</div>
+                                </>
+                            )}
                         </div>
                     </div>
                     <div className="program-body" ref={programBodyRef}>
@@ -296,6 +326,7 @@ const ProgramTable = () => {
                                 onUpdateCell={handleUpdateCell}
                                 baseRowHeight={baseRowHeight}
                                 BASE_HEIGHT_MINUTES={BASE_HEIGHT_MINUTES}
+                                viewMode={viewMode}
                             />
                         ))}
                     </div>

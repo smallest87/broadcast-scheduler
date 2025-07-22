@@ -1,8 +1,21 @@
-Rundown,Durasi,Segmen,Jenis
-,00:05:00,Pembukaan Acara,Opening
-,00:10:00,Berita Utama,Berita
-,00:15:00,Sesi Wawancara,Talkshow
-,00:08:00,Iklan,Iklan
-,00:20:00,Diskusi Panel,Live
-,00:07:00,Segment Feature,Feature
-,00:05:00,Penutupan Acara,Closing
+ID,Durasi,Segmen,Jenis
+001,00:30:00,"Berita Pagi","LIVE"
+002,01:00:00,"Talkshow Inspiratif","PAKET"
+003,00:15:00,"Segmen Hiburan","PAKET"
+004,00:15:00,"Laporan Cuaca dan Lalu Lintas","PAKET"
+005,01:00:00,"Dokumenter Edukasi","PAKET"
+006,00:15:00,"Kuis Interaktif","LIVE"
+007,00:30:00,"Segmen Olahraga","PAKET"
+008,01:00:00,"Preview Berita Utama","LIVE"
+009,02:00:00,"Program Utama Malam Ini","PAKET"
+010,00:10:00,"Tayangan Tengah Malam","PAKET"
+011,00:10:00,"Tayangan 01","PAKET"
+012,00:10:00,"Tayangan 02","PAKET"
+013,00:30:00,"Tayangan 03","PAKET"
+014,01:00:00,"Tayangan 04","PAKET"
+015,02:00:00,"Tayangan 05","PAKET"
+016,00:15:00,"Tayangan 06","PAKET"
+017,01:00:00,"Tayangan 07","PAKET"
+018,00:30:00,"Tayangan 08","PAKET"
+019,00:15:00,"Tayangan 09","PAKET"
+020,00:15:00,"Tayangan 10","PAKET"

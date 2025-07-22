@@ -13,14 +13,32 @@ import { parseCSV, convertToCSV } from './utils/csvUtils.js';
 import './index.css'; // Import gaya default (glassmorphism)
 import './styles/theme-light.css'; // Import gaya tema light
 import './styles/theme-dark.css'; // Import gaya tema dark
+import SuccessModal from './components/SuccessModal.jsx'; // NEW: Import SuccessModal
 
 function App() {
   const [startTime, setStartTime] = useState('12:00:00');
   const [programData, setProgramData] = useState([]); // State programData dimiliki oleh App.jsx
   const [showExampleScheduleNote, setShowExampleScheduleNote] = useState(true); // State ini juga dimiliki oleh App.jsx
   const [currentTheme, setCurrentTheme] = useState('glassmorphism'); // State untuk tema aktif
+  const [showLoadDbButton, setShowLoadDbButton] = useState(false); // NEW: State untuk visibilitas tombol Load DB
+
+  // NEW: State untuk Modal Notifikasi
+  const [modalShow, setModalShow] = useState(false);
+  const [modalMessage, setModalMessage] = useState('');
 
   const navigate = useNavigate(); // Hook untuk navigasi programatis
+
+  // Fungsi untuk menampilkan modal
+  const showNotificationModal = useCallback((message) => {
+    setModalMessage(message);
+    setModalShow(true);
+  }, []);
+
+  // Fungsi untuk menyembunyikan modal
+  const closeNotificationModal = useCallback(() => {
+    setModalShow(false);
+    setModalMessage('');
+  }, []);
 
   // Effect untuk mengatur kelas di elemen body berdasarkan tema yang dipilih
   useEffect(() => {
@@ -52,12 +70,39 @@ function App() {
         const parsedData = parseCSV(csvText).map((item, idx) => ({ ...item, id: `${item.Segmen}-${idx}` }));
         setProgramData(parsedData);
         setShowExampleScheduleNote(true); // Tampilkan keterangan contoh jadwal
+        setShowLoadDbButton(true); // NEW: Tampilkan tombol Load DB setelah CSV dimuat
       })
       .catch(error => {
         console.error('Error loading CSV:', error);
         setShowExampleScheduleNote(false); // Sembunyikan keterangan jika gagal muat
+        setShowLoadDbButton(true); // NEW: Tetap tampilkan tombol Load DB meskipun gagal muat CSV
       });
   }, []); // Array dependensi kosong: efek hanya berjalan sekali saat mount
+
+  // NEW: Fungsi untuk memuat data dari database MySQL
+  const handleLoadFromDatabase = useCallback(async () => {
+    try {
+      const response = await fetch('http://localhost:3001/api/jadwal'); // Asumsi API berjalan di port 3001
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      // Map data dari API agar sesuai dengan format yang diharapkan (misal: 'id' dari DB, 'Durasi' dari DB jadi 'durasi')
+      const formattedData = data.map(item => ({
+        id: item.id,
+        Durasi: item.durasi,
+        Segmen: item.segmen,
+        Jenis: item.jenis
+      }));
+      setProgramData(formattedData);
+      setShowExampleScheduleNote(false); // Sembunyikan keterangan saat data DB dimuat
+      showNotificationModal('Jadwal berhasil dimuat dari database!'); // NEW: Ganti alert() dengan modal
+    } catch (error) {
+      console.error('Error loading data from database:', error);
+      showNotificationModal('Gagal memuat jadwal dari database. Pastikan backend berjalan.'); // NEW: Ganti alert() dengan modal
+      setShowExampleScheduleNote(false); // Sembunyikan keterangan jika gagal
+    }
+  }, [showNotificationModal]); // Tambahkan showNotificationModal sebagai dependensi
 
   // Gaya untuk tombol Pengaturan (didefinisikan di sini karena prop drilling)
   const settingsButtonStyle = {
@@ -83,16 +128,38 @@ function App() {
   };
   const [isSettingsHovered, setIsSettingsHovered] = useState(false); // State hover untuk tombol Pengaturan
 
+  // NEW: Gaya untuk tombol Load Database
+  const loadDbButtonStyle = {
+    padding: '10px 18px',
+    fontSize: '16px',
+    cursor: 'pointer',
+    backgroundColor: '#28a745', // Warna hijau
+    color: 'white',
+    border: 'none',
+    borderRadius: '25px',
+    boxShadow: '0 2px 5px rgba(0,0,0,0.2)',
+    transition: 'background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease',
+    marginLeft: '15px',
+  };
+
+  const loadDbButtonHoverStyle = {
+    backgroundColor: '#218838', // Warna hijau lebih gelap saat hover
+    transform: 'translateY(-1px)',
+    boxShadow: '0 4px 8px rgba(0,0,0,0.25)',
+  };
+  const [isLoadDbHovered, setIsLoadDbHovered] = useState(false); // State hover untuk tombol Load DB
+
+
   // Fungsi untuk menerapkan pengaturan Jam Mulai (dipanggil dari SettingsPage)
   const applySettings = useCallback((newStartTime) => {
     if (isValidTimeFormat(newStartTime)) {
       setStartTime(newStartTime);
-      alert(`Pengaturan berhasil diterapkan. Jam Mulai diperbarui ke ${newStartTime}.`);
+      showNotificationModal(`Pengaturan berhasil diterapkan. Jam Mulai diperbarui ke ${newStartTime}.`); // NEW: Ganti alert() dengan modal
       navigate('/'); // Kembali ke halaman utama setelah menerapkan
     } else {
-      alert('Format Jam Mulai tidak valid! Harap gunakan format HH:MM:SS.');
+      showNotificationModal('Format Jam Mulai tidak valid! Harap gunakan format HH:MM:SS.'); // NEW: Ganti alert() dengan modal
     }
-  }, [navigate]); // `Maps` perlu menjadi dependensi `useCallback`
+  }, [navigate, showNotificationModal]); // Tambahkan showNotificationModal sebagai dependensi
 
   // Fungsi untuk mengunggah file CSV (dipanggil dari SettingsPage)
   const handleCsvFileUpload = useCallback((event) => {
@@ -104,11 +171,12 @@ function App() {
         const parsedData = parseCSV(csvText).map((item, idx) => ({ ...item, id: `${item.Segmen}-${idx}` }));
         setProgramData(parsedData); // Perbarui programData di App.jsx
         setShowExampleScheduleNote(false); // Sembunyikan keterangan saat CSV baru diunggah
-        alert('File CSV berhasil diunggah dan diterapkan!');
+        showNotificationModal('File CSV berhasil diunggah dan diterapkan!'); // NEW: Ganti alert() dengan modal
+        navigate('/'); // NEW: Kembali ke halaman utama setelah upload CSV
       };
       reader.readAsText(file);
     }
-  }, []); // Tidak ada dependensi karena hanya menggunakan setter state
+  }, [navigate, showNotificationModal]); // Tambahkan navigate dan showNotificationModal sebagai dependensi
 
   // Fungsi untuk mengunduh file CSV (dipanggil dari SettingsPage)
   const handleDownloadCsv = useCallback(() => {
@@ -122,14 +190,14 @@ function App() {
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
-    alert('Jadwal berhasil diunduh sebagai CSV!');
-  }, [programData]); // `programData` adalah dependensi `useCallback` karena digunakan di dalamnya
+    showNotificationModal('Jadwal berhasil diunduh sebagai CSV!'); // NEW: Ganti alert() dengan modal
+  }, [programData, showNotificationModal]); // Tambahkan showNotificationModal sebagai dependensi
 
   // Handler untuk mengubah tema (dipanggil dari DisplaySettings)
   const handleThemeChange = useCallback((themeName) => {
     setCurrentTheme(themeName);
-    alert(`Tema berhasil diubah ke: ${themeName}`);
-  }, []); // Tidak ada dependensi karena hanya menggunakan setter state
+    showNotificationModal(`Tema berhasil diubah ke: ${themeName}`); // NEW: Ganti alert() dengan modal
+  }, [showNotificationModal]); // Tambahkan showNotificationModal sebagai dependensi
 
   return (
     <> {/* Fragment digunakan sebagai pembungkus root karena BrowserRouter ada di main.jsx */}
@@ -137,18 +205,32 @@ function App() {
         <Route
           path="/"
           element={
-            <ProgramTable
-              startTime={startTime} // Teruskan startTime ke ProgramTable
-              programData={programData} // Teruskan programData ke ProgramTable
-              setProgramData={setProgramData} // Teruskan setProgramData ke ProgramTable (untuk drag/drop & edit cell)
-              showExampleScheduleNote={showExampleScheduleNote} // Teruskan ini juga
-              settingsButton={{ // Teruskan props tombol Pengaturan ke ProgramTable
-                style: settingsButtonStyle,
-                hoverStyle: settingsButtonHoverStyle,
-                isHovered: isSettingsHovered,
-                setIsHovered: setIsSettingsHovered,
-              }}
-            />
+            <div className="main-app-content"> {/* NEW: Tambahkan div pembungkus untuk menampung tombol*/}
+              {showLoadDbButton && (
+                <div style={{ textAlign: 'center', marginBottom: '20px', marginTop: '20px' }}>
+                  <button
+                    onClick={handleLoadFromDatabase}
+                    style={isLoadDbHovered ? { ...loadDbButtonStyle, ...loadDbButtonHoverStyle } : loadDbButtonStyle}
+                    onMouseEnter={() => setIsLoadDbHovered(true)}
+                    onMouseLeave={() => setIsLoadDbHovered(false)}
+                  >
+                    Muat dari Database
+                  </button>
+                </div>
+              )}
+              <ProgramTable
+                startTime={startTime} // Teruskan startTime ke ProgramTable
+                programData={programData} // Teruskan programData ke ProgramTable
+                setProgramData={setProgramData} // Teruskan setProgramData ke ProgramTable (untuk drag/drop & edit cell)
+                showExampleScheduleNote={showExampleScheduleNote} // Teruskan ini juga
+                settingsButton={{ // Teruskan props tombol Pengaturan ke ProgramTable
+                  style: settingsButtonStyle,
+                  hoverStyle: settingsButtonHoverStyle,
+                  isHovered: isSettingsHovered,
+                  setIsHovered: setIsSettingsHovered,
+                }}
+              />
+            </div>
           }
         />
         {/* Deklarasikan SettingsLayout sebagai induk dengan children routes */}
@@ -174,6 +256,13 @@ function App() {
           />
         </Route>
       </Routes>
+
+      {/* NEW: Render SuccessModal di sini */}
+      <SuccessModal
+        show={modalShow}
+        message={modalMessage}
+        onClose={closeNotificationModal}
+      />
     </>
   );
 }

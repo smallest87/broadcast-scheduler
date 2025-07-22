@@ -1,0 +1,150 @@
+/* src/styles/SuccessModal.css (Diperbarui) */
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.4); /* Latar belakang sedikit lebih terang */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    backdrop-filter: blur(3px); /* Efek blur dikurangi sedikit */
+}
+
+.modal-content {
+    background-color: rgba(255, 255, 255, 0.8); /* Background lebih solid */
+    border-radius: 8px; /* Radius border sedikit lebih kecil */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    padding: 20px; /* Padding dikurangi sedikit */
+    width: 80%; /* Lebar default diperkecil */
+    max-width: 300px; /* Lebar maksimum diperkecil */
+    color: #333; /* Warna teks default menjadi gelap agar terlihat di background putih */
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+/* Tema Light */
+body.light-theme .modal-content {
+    background-color: rgba(255, 255, 255, 0.9);
+    color: #333;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+/* Tema Dark */
+body.dark-theme .modal-content {
+    background-color: rgba(50, 50, 50, 0.85);
+    color: #f0f0f0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border: 1px solid rgba(70, 70, 70, 0.3);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px; /* Margin bawah header diperkecil */
+    padding-bottom: 8px; /* Padding bawah header diperkecil */
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1); /* Warna border lebih gelap untuk tema terang */
+}
+
+body.light-theme .modal-header {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+body.dark-theme .modal-header {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.modal-header h2 {
+    margin: 0;
+    font-size: 1.2em; /* Ukuran font header diperkecil */
+    font-weight: 600;
+    color: inherit;
+}
+
+.modal-body {
+    margin-bottom: 15px; /* Margin bawah body diperkecil */
+    font-size: 0.95em; /* Ukuran font body diperkecil */
+    line-height: 1.4;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.close-button, .modal-footer button {
+    background-color: #007bff; /* Warna tombol tetap biru */
+    color: white;
+    border: none;
+    padding: 6px 12px; /* Padding tombol diperkecil */
+    border-radius: 6px; /* Radius border tombol diperkecil */
+    cursor: pointer;
+    font-size: 0.9em; /* Ukuran font tombol diperkecil */
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin-left: 5px; /* Jarak antar tombol di footer */
+}
+
+.close-button:hover, .modal-footer button:hover {
+    background-color: #0056b3;
+    transform: translateY(-1px);
+}
+
+.close-button {
+    font-size: 1.5em; /* Ukuran font tombol close diperkecil */
+    line-height: 1;
+    padding: 0px 8px; /* Padding tombol close disesuaikan */
+    background: none;
+    color: rgba(0, 0, 0, 0.5); /* Warna X lebih gelap untuk tema terang */
+    border: none;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.close-button:hover {
+    color: #333;
+    background: none;
+    transform: none;
+}
+
+body.light-theme .close-button {
+    color: rgba(0, 0, 0, 0.5);
+}
+
+body.light-theme .close-button:hover {
+    color: #333;
+}
+
+body.dark-theme .close-button {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+body.dark-theme .close-button:hover {
+    color: white;
+}
+
+/* Gaya tombol di footer untuk tema */
+body.light-theme .modal-footer button {
+    background-color: #007bff;
+}
+body.light-theme .modal-footer button:hover {
+    background-color: #0056b3;
+}
+
+body.dark-theme .modal-footer button {
+    background-color: #007bff;
+}
+body.dark-theme .modal-footer button:hover {
+    background-color: #0056b3;
+}

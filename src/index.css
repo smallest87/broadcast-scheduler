@@ -12,14 +12,14 @@ body {
 }
 
 /* Gaya default/glassmorphism hanya berlaku jika body TIDAK memiliki kelas light-theme atau dark-theme */
-body:not(.light-theme):not(.dark-theme) h1 { /* NEW: Tambahkan :not(.dark-theme) */
+body:not(.light-theme):not(.dark-theme) h1 {
     color: #212529;
     text-align: center;
     margin-bottom: 25px;
     text-shadow: 1px 1px 2px rgba(255,255,255,0.7);
 }
 
-body:not(.light-theme):not(.dark-theme) .controls { /* NEW: Tambahkan :not(.dark-theme) */
+body:not(.light-theme):not(.dark-theme) .controls {
     margin-bottom: 25px;
     display: flex;
     align-items: center;
@@ -36,12 +36,12 @@ body:not(.light-theme):not(.dark-theme) .controls { /* NEW: Tambahkan :not(.dark
     margin-left: auto;
     margin-right: auto;
 }
-body:not(.light-theme):not(.dark-theme) .controls label { /* NEW: Tambahkan :not(.dark-theme) */
+body:not(.light-theme):not(.dark-theme) .controls label {
     font-weight: bold;
     color: #333;
     text-shadow: 0 0 2px rgba(255, 255, 255, 0.5);
 }
-body:not(.light-theme):not(.dark-theme) .controls button { /* NEW: Tambahkan :not(.dark-theme) */
+body:not(.light-theme):not(.dark-theme) .controls button {
     padding: 10px 18px;
     font-size: 16px;
     cursor: pointer;
@@ -52,14 +52,14 @@ body:not(.light-theme):not(.dark-theme) .controls button { /* NEW: Tambahkan :no
     box-shadow: 0 2px 5px rgba(0,0,0,0.2);
     transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
 }
-body:not(.light-theme):not(.dark-theme) .controls button:hover { /* NEW: Tambahkan :not(.dark-theme) */
+body:not(.light-theme):not(.dark-theme) .controls button:hover {
     background-color: #0056b3;
     transform: translateY(-1px);
     box-shadow: 0 4px 8px rgba(0,0,0,0.25);
 }
-body:not(.light-theme):not(.dark-theme) .controls input[type="file"], /* NEW: Tambahkan :not(.dark-theme) */
-body:not(.light-theme):not(.dark-theme) .controls input[type="time"], /* NEW: Tambahkan :not(.dark-theme) */
-body:not(.light-theme):not(.dark-theme) .controls select { /* NEW: Tambahkan :not(.dark-theme) */
+body:not(.light-theme):not(.dark-theme) .controls input[type="file"],
+body:not(.light-theme):not(.dark-theme) .controls input[type="time"],
+body:not(.light-theme):not(.dark-theme) .controls select {
     padding: 8px 12px;
     border: 1px solid rgba(255, 255, 255, 0.5);
     border-radius: 8px;
@@ -80,13 +80,54 @@ body:not(.light-theme):not(.dark-theme) .controls select { /* NEW: Tambahkan :no
     cursor: pointer;
 }
 
-body:not(.light-theme):not(.dark-theme) .controls select option { /* NEW: Tambahkan :not(.dark-theme) */
+body:not(.light-theme):not(.dark-theme) .controls select option {
     background-color: rgba(255, 255, 255, 0.8);
     color: #333;
 }
 
 /* Keterangan contoh jadwal untuk tema default */
-body:not(.light-theme):not(.dark-theme) p { /* NEW: Tambahkan :not(.dark-theme) */
+body:not(.light-theme):not(.dark-theme) p {
     color: #495057;
     text-shadow: 0 0 2px rgba(255,255,255,0.5);
+}
+
+/* Gaya untuk Notifikasi Badge */
+.notification-badge {
+  /* Diubah dari sticky menjadi relative untuk agar mengikuti aliran dokumen di dalam .controls */
+  position: relative; 
+  /* Hapus top, left, transform karena akan mengikuti aliran normal */
+  /* top: 10px; */ 
+  /* left: 50%; */
+  /* transform: translateX(-50%); */ 
+  
+  background-color: #28a745; /* Warna hijau untuk sukses */
+  color: white;
+  padding: 10px 20px;
+  border-radius: 25px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  z-index: 1000; 
+  font-weight: bold;
+  text-align: center;
+  /* Sesuaikan margin agar ada jarak di dalam .controls */
+  margin-top: 15px; /* Jarak dari elemen di atasnya di dalam .controls */
+  margin-left: auto; /* Untuk menengahkan jika .controls adalah flexbox */
+  margin-right: auto; /* Untuk menengahkan jika .controls adalah flexbox */
+  width: fit-content; /* Sesuaikan lebar badge dengan isinya */
+  opacity: 1;
+  transition: opacity 0.5s ease-in-out;
+}
+
+/* Jika Anda ingin badge error (misal, untuk kegagalan load data) */
+.notification-badge.error {
+  background-color: #dc3545; /* Warna merah untuk error */
+}
+
+/* Opsi: Untuk tema light, jika Anda ingin badge sedikit berbeda */
+body.light-theme .notification-badge {
+  /* background-color: #218838; Contoh: sedikit lebih gelap di tema light */
+}
+
+/* Opsi: Untuk tema dark, jika Anda ingin badge sedikit berbeda */
+body.dark-theme .notification-badge {
+  /* background-color: #1e7e34; Contoh: sedikit lebih gelap di tema dark */
 }

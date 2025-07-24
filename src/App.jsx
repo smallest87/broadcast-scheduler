@@ -102,7 +102,8 @@ function App() {
       const formattedData = sortedData.map(item => ({ // Menggunakan sortedData
         id: item.id,
         Durasi: item.durasi,
-        Segmen: item.segmen,
+        // Mengambil nilai 'segmen' (sudah diubah jadi jadwal_namaacara) dari JSON API dan menetapkannya ke properti 'Segmen'
+        Segmen: item.jadwal_namaacara,
         Jenis: item.jenis
       }));
       setProgramData(formattedData);

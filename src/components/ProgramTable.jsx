@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import Sortable from 'sortablejs';
 import { Link } from 'react-router-dom';
+import { FiSettings } from 'react-icons/fi';
 import ProgramRow from './ProgramRow.jsx';
 import RealTimeIndicator from './RealTimeIndicator.jsx';
 import { timeToSeconds, secondsToTime, isValidTimeFormat, durationToMinutes } from '../utils/timeUtils.js';
@@ -169,7 +170,7 @@ const ProgramTable = ({ startTime, programData, setProgramData, showExampleSched
 
     return (
         <div>
-            <h1>Jadwal Acara</h1>
+            <h1>Broadcast Scheduler v1.0</h1>
             {showExampleScheduleNote && ( // showExampleScheduleNote dari props
                 <p style={{ textAlign: 'center', color: '#495057', fontSize: '1.1em', marginTop: '-15px', marginBottom: '20px', textShadow: '0 0 2px rgba(255,255,255,0.5)' }}>
                     Contoh Jadwal Siaran
@@ -193,6 +194,7 @@ const ProgramTable = ({ startTime, programData, setProgramData, showExampleSched
                     onMouseEnter={() => settingsButton.setIsHovered(true)}
                     onMouseLeave={() => settingsButton.setIsHovered(false)}
                 >
+                    <FiSettings size={14} />
                     Pengaturan
                 </Link>
             </div>

@@ -10,11 +10,12 @@ import DisplaySettings from './components/settings/DisplaySettings.jsx';
 
 import { isValidTimeFormat } from './utils/timeUtils.js';
 import { parseCSV, convertToCSV } from './utils/csvUtils.js';
-import { mapApiProgramData } from './utils/dataMapping.js'; // NEW: Import fungsi mapper
+import { mapApiProgramData } from './utils/dataMapping.js';
 import './index.css';
 import './styles/theme-light.css';
 import './styles/theme-dark.css';
 import SuccessModal from './components/SuccessModal.jsx';
+import ProgressBarModal from './components/ProgressBarModal.jsx';
 
 function App() {
   const [startTime, setStartTime] = useState('12:00:00');
@@ -25,6 +26,8 @@ function App() {
 
   const [modalShow, setModalShow] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
+  const [showProgressBar, setShowProgressBar] = useState(false);
+  const [progressBarMessage, setProgressBarMessage] = useState(''); // NEW: State for dynamic progress message
 
   const navigate = useNavigate();
 
@@ -69,11 +72,33 @@ function App() {
   }, []);
 
   const handleLoadFromDatabase = useCallback(async () => {
+    setShowProgressBar(true);
+    let delay = 0; // Initial delay
+    const baseDelay = 200; // Base delay for each step
+
     try {
+      // Step 1: Mulai Pemuatan & Tampilkan Indikator Progres
+      setProgressBarMessage('Memulai koneksi ke database...');
+      await new Promise(resolve => setTimeout(resolve, (delay += baseDelay)));
+
+      // Step 2: Kirim Permintaan API
+      setProgressBarMessage('Mengirim permintaan data jadwal...');
+      await new Promise(resolve => setTimeout(resolve, (delay += baseDelay)));
+
       const response = await fetch('https://api.newsnoid.com/jadwal-program');
+
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
+
+      // Step 3: Tunggu dan Terima Respons
+      setProgressBarMessage('Menerima respons dari server...');
+      await new Promise(resolve => setTimeout(resolve, (delay += baseDelay)));
+
+      // Step 4: Parse Data JSON
+      setProgressBarMessage('Mengurai data yang diterima...');
+      await new Promise(resolve => setTimeout(resolve, (delay += baseDelay)));
+
       const result = await response.json();
       console.log('API Raw Response Result:', result);
 
@@ -83,16 +108,32 @@ function App() {
 
       const apiDataArray = result.data;
 
-      // NEW: Panggil fungsi mapper yang sudah dipisahkan
+      // Step 5: Validasi dan Peta Data
+      setProgressBarMessage('Memvalidasi dan memformat data...');
+      await new Promise(resolve => setTimeout(resolve, (delay += baseDelay)));
+
       const formattedData = mapApiProgramData(apiDataArray);
+
+      // Step 6: Perbarui Tampilan Aplikasi
+      setProgressBarMessage('Memperbarui jadwal di tampilan...');
+      await new Promise(resolve => setTimeout(resolve, (delay += baseDelay)));
 
       setProgramData(formattedData);
       setShowExampleScheduleNote(false);
+
+      // Step 7: Beri Notifikasi Sukses
+      await new Promise(resolve => setTimeout(resolve, (delay += baseDelay))); // Add final delay before success message
       showNotificationModal('Jadwal berhasil dimuat dari database!');
+
     } catch (error) {
       console.error('Error loading data from database:', error);
+      setProgressBarMessage(`Terjadi kesalahan: ${error.message}.`); // Show error in progress modal
+      await new Promise(resolve => setTimeout(resolve, (delay += baseDelay * 2))); // Longer delay for error message
       showNotificationModal(`Gagal memuat jadwal dari database: ${error.message}.`);
       setShowExampleScheduleNote(false);
+    } finally {
+      setShowProgressBar(false); // Hide progress bar regardless of success or error
+      setProgressBarMessage(''); // Clear message
     }
   }, [showNotificationModal]);
 
@@ -243,6 +284,10 @@ function App() {
         show={modalShow}
         message={modalMessage}
         onClose={closeNotificationModal}
+      />
+      <ProgressBarModal
+        show={showProgressBar}
+        message={progressBarMessage} // Pass the dynamic message
       />
     </>
   );

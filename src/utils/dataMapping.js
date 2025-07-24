@@ -17,7 +17,7 @@ export const mapApiProgramData = (apiDataArray) => {
   return sortedData.map(item => ({
     id: item.id,
     Durasi: item.durasi,
-    Segmen: item.jadwal_namaacara, // Sesuaikan jika nama properti API berubah
+    Segmen: item.jadwal_namaacara,
     Jenis: item.jenis
   }));
 };

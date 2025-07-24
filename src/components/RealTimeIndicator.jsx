@@ -1,11 +1,11 @@
 // src/components/RealTimeIndicator.jsx
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback, useMemo } from 'react';
 import { timeToSeconds, secondsToTime, isValidTimeFormat } from '../utils/timeUtils.js';
 
 import './RealTimeIndicator.css'; // Pastikan file ini ada dan kosong atau berisi gaya dasar jika mau
 
-const RealTimeIndicator = ({ programBodyRef, programTableRef, tableWrapperRef, dataWithRundownCache, baseRowHeight }) => {
+const RealTimeIndicator = React.memo(({ programBodyRef, programTableRef, tableWrapperRef, dataWithRundownCache, baseRowHeight }) => {
     const animationFrameRef = useRef(null);
     const [indicatorStyle, setIndicatorStyle] = useState({
         top: null,
@@ -15,8 +15,19 @@ const RealTimeIndicator = ({ programBodyRef, programTableRef, tableWrapperRef, d
     });
     const [timeLabel, setTimeLabel] = useState('');
 
+    // Optimize animation to run at 2fps instead of 60fps for better performance
+    const lastUpdateRef = useRef(0);
+    const UPDATE_INTERVAL = 500; // Update every 500ms (2fps)
+
     useEffect(() => {
-        const animateIndicator = () => {
+        const animateIndicator = (timestamp) => {
+            // Throttle updates to reduce CPU usage
+            if (timestamp - lastUpdateRef.current < UPDATE_INTERVAL) {
+                animationFrameRef.current = requestAnimationFrame(animateIndicator);
+                return;
+            }
+            lastUpdateRef.current = timestamp;
+
             const now = new Date();
             const currentHours = now.getHours();
             const currentMinutes = now.getMinutes();
@@ -124,6 +135,8 @@ const RealTimeIndicator = ({ programBodyRef, programTableRef, tableWrapperRef, d
             </span>
         </div>
     );
-};
+});
+
+RealTimeIndicator.displayName = 'RealTimeIndicator';
 
 export default RealTimeIndicator;

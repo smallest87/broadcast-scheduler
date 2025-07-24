@@ -1,12 +1,14 @@
 // src/App.jsx
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, Suspense, lazy } from 'react';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import ProgramTable from './components/ProgramTable.jsx';
-import SettingsLayout from './components/settings/SettingsLayout.jsx';
-import GeneralSettings from './components/settings/GeneralSettings.jsx';
-import DataManagementSettings from './components/settings/DataManagementSettings.jsx';
-import UserRolesSettings from './components/settings/UserRolesSettings.jsx';
-import DisplaySettings from './components/settings/DisplaySettings.jsx';
+
+// Lazy load settings components for code splitting
+const SettingsLayout = lazy(() => import('./components/settings/SettingsLayout.jsx'));
+const GeneralSettings = lazy(() => import('./components/settings/GeneralSettings.jsx'));
+const DataManagementSettings = lazy(() => import('./components/settings/DataManagementSettings.jsx'));
+const UserRolesSettings = lazy(() => import('./components/settings/UserRolesSettings.jsx'));
+const DisplaySettings = lazy(() => import('./components/settings/DisplaySettings.jsx'));
 
 import { isValidTimeFormat } from './utils/timeUtils.js';
 import { parseCSV, convertToCSV } from './utils/csvUtils.js';
@@ -227,58 +229,60 @@ function App() {
 
   return (
     <>
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <div className="main-app-content">
-              {showLoadDbButton && (
-                <div style={{ textAlign: 'center', marginBottom: '20px', marginTop: '20px' }}>
-                  <button
-                    onClick={handleLoadFromDatabase}
-                    style={isLoadDbHovered ? { ...loadDbButtonStyle, ...loadDbButtonHoverStyle } : loadDbButtonStyle}
-                    onMouseEnter={() => setIsLoadDbHovered(true)}
-                    onMouseLeave={() => setIsLoadDbHovered(false)}
-                  >
-                    Muat dari Database
-                  </button>
-                </div>
-              )}
-              <ProgramTable
-                startTime={startTime}
-                programData={programData}
-                setProgramData={setProgramData}
-                showExampleScheduleNote={showExampleScheduleNote}
-                settingsButton={{
-                  style: settingsButtonStyle,
-                  hoverStyle: settingsButtonHoverStyle,
-                  isHovered: isSettingsHovered,
-                  setIsHovered: setIsSettingsHovered,
-                }}
-              />
-            </div>
-          }
-        />
-        <Route path="/settings" element={<SettingsLayout />}>
+      <Suspense fallback={<div style={{ textAlign: 'center', padding: '20px' }}>Loading...</div>}>
+        <Routes>
           <Route
-            index
-            element={<GeneralSettings currentStartTime={startTime} onApplySettings={applySettings} />}
+            path="/"
+            element={
+              <div className="main-app-content">
+                {showLoadDbButton && (
+                  <div style={{ textAlign: 'center', marginBottom: '20px', marginTop: '20px' }}>
+                    <button
+                      onClick={handleLoadFromDatabase}
+                      style={isLoadDbHovered ? { ...loadDbButtonStyle, ...loadDbButtonHoverStyle } : loadDbButtonStyle}
+                      onMouseEnter={() => setIsLoadDbHovered(true)}
+                      onMouseLeave={() => setIsLoadDbHovered(false)}
+                    >
+                      Muat dari Database
+                    </button>
+                  </div>
+                )}
+                <ProgramTable
+                  startTime={startTime}
+                  programData={programData}
+                  setProgramData={setProgramData}
+                  showExampleScheduleNote={showExampleScheduleNote}
+                  settingsButton={{
+                    style: settingsButtonStyle,
+                    hoverStyle: settingsButtonHoverStyle,
+                    isHovered: isSettingsHovered,
+                    setIsHovered: setIsSettingsHovered,
+                  }}
+                />
+              </div>
+            }
           />
-          <Route
-            path="general"
-            element={<GeneralSettings currentStartTime={startTime} onApplySettings={applySettings} />}
-          />
-          <Route
-            path="data"
-            element={<DataManagementSettings onCsvFileUpload={handleCsvFileUpload} onDownloadCsv={handleDownloadCsv} />}
-          />
-          <Route path="roles" element={<UserRolesSettings />} />
-          <Route
-            path="display"
-            element={<DisplaySettings currentTheme={currentTheme} onThemeChange={handleThemeChange} />}
-          />
-        </Route>
-      </Routes>
+          <Route path="/settings" element={<SettingsLayout />}>
+            <Route
+              index
+              element={<GeneralSettings currentStartTime={startTime} onApplySettings={applySettings} />}
+            />
+            <Route
+              path="general"
+              element={<GeneralSettings currentStartTime={startTime} onApplySettings={applySettings} />}
+            />
+            <Route
+              path="data"
+              element={<DataManagementSettings onCsvFileUpload={handleCsvFileUpload} onDownloadCsv={handleDownloadCsv} />}
+            />
+            <Route path="roles" element={<UserRolesSettings />} />
+            <Route
+              path="display"
+              element={<DisplaySettings currentTheme={currentTheme} onThemeChange={handleThemeChange} />}
+            />
+          </Route>
+        </Routes>
+      </Suspense>
 
       <SuccessModal
         show={modalShow}

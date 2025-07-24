@@ -10,55 +10,44 @@ import DisplaySettings from './components/settings/DisplaySettings.jsx';
 
 import { isValidTimeFormat } from './utils/timeUtils.js';
 import { parseCSV, convertToCSV } from './utils/csvUtils.js';
-import './index.css'; // Import gaya default (glassmorphism)
-import './styles/theme-light.css'; // Import gaya tema light
-import './styles/theme-dark.css'; // Import gaya tema dark
-import SuccessModal from './components/SuccessModal.jsx'; // NEW: Import SuccessModal
+import { mapApiProgramData } from './utils/dataMapping.js'; // NEW: Import fungsi mapper
+import './index.css';
+import './styles/theme-light.css';
+import './styles/theme-dark.css';
+import SuccessModal from './components/SuccessModal.jsx';
 
 function App() {
   const [startTime, setStartTime] = useState('12:00:00');
-  const [programData, setProgramData] = useState([]); // State programData dimiliki oleh App.jsx
-  const [showExampleScheduleNote, setShowExampleScheduleNote] = useState(true); // State ini juga dimiliki oleh App.jsx
-  const [currentTheme, setCurrentTheme] = useState('glassmorphism'); // State untuk tema aktif
-  const [showLoadDbButton, setShowLoadDbButton] = useState(false); // NEW: State untuk visibilitas tombol Load DB
+  const [programData, setProgramData] = useState([]);
+  const [showExampleScheduleNote, setShowExampleScheduleNote] = useState(true);
+  const [currentTheme, setCurrentTheme] = useState('glassmorphism');
+  const [showLoadDbButton, setShowLoadDbButton] = useState(false);
 
-  // NEW: State untuk Modal Notifikasi
   const [modalShow, setModalShow] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
 
-  const navigate = useNavigate(); // Hook untuk navigasi programatis
+  const navigate = useNavigate();
 
-  // Fungsi untuk menampilkan modal
   const showNotificationModal = useCallback((message) => {
     setModalMessage(message);
     setModalShow(true);
   }, []);
 
-  // Fungsi untuk menyembunyikan modal
   const closeNotificationModal = useCallback(() => {
     setModalShow(false);
     setModalMessage('');
   }, []);
 
-  // Effect untuk mengatur kelas di elemen body berdasarkan tema yang dipilih
   useEffect(() => {
-    // Hapus semua kelas tema yang mungkin ada sebelumnya
     document.body.classList.remove('light-theme', 'dark-theme');
-
-    // Tambahkan kelas tema yang sesuai
     if (currentTheme === 'light') {
       document.body.classList.add('light-theme');
     } else if (currentTheme === 'dark') {
       document.body.classList.add('dark-theme');
     }
-    // Jika currentTheme adalah 'glassmorphism', tidak ada kelas tambahan yang ditambahkan,
-    // sehingga gaya default di index.css dan ProgramTable.css yang selector-nya :not(.light-theme):not(.dark-theme) akan berlaku.
-  }, [currentTheme]); // Dipicu setiap kali currentTheme berubah
+  }, [currentTheme]);
 
-  // Effect untuk memuat CSV awal saat aplikasi pertama kali dimuat
   useEffect(() => {
-    // Gunakan import.meta.env.BASE_URL untuk fetching assets yang berada di folder public
-    // Ini penting untuk penanganan base path saat aplikasi di-deploy di sub-direktori
     fetch(`${import.meta.env.BASE_URL}jadwal_siaran.csv`)
       .then(response => {
         if (!response.ok) {
@@ -69,17 +58,16 @@ function App() {
       .then(csvText => {
         const parsedData = parseCSV(csvText).map((item, idx) => ({ ...item, id: `${item.Segmen}-${idx}` }));
         setProgramData(parsedData);
-        setShowExampleScheduleNote(true); // Tampilkan keterangan contoh jadwal
-        setShowLoadDbButton(true); // NEW: Tampilkan tombol Load DB setelah CSV dimuat
+        setShowExampleScheduleNote(true);
+        setShowLoadDbButton(true);
       })
       .catch(error => {
         console.error('Error loading CSV:', error);
-        setShowExampleScheduleNote(false); // Sembunyikan keterangan jika gagal muat
-        setShowLoadDbButton(true); // NEW: Tetap tampilkan tombol Load DB meskipun gagal muat CSV
+        setShowExampleScheduleNote(false);
+        setShowLoadDbButton(true);
       });
-  }, []); // Array dependensi kosong: efek hanya berjalan sekali saat mount
+  }, []);
 
-  // NEW: Fungsi untuk memuat data dari database MySQL
   const handleLoadFromDatabase = useCallback(async () => {
     try {
       const response = await fetch('https://api.newsnoid.com/jadwal-program');
@@ -95,17 +83,9 @@ function App() {
 
       const apiDataArray = result.data;
 
-      // Mengurutkan data berdasarkan 'id' secara ascending (terkecil ke terbesar)
-      const sortedData = apiDataArray.sort((a, b) => a.id - b.id); // NEW: Tambahan untuk mengurutkan data
+      // NEW: Panggil fungsi mapper yang sudah dipisahkan
+      const formattedData = mapApiProgramData(apiDataArray);
 
-      // Map data dari API agar sesuai dengan format yang diharapkan (misal: 'id' dari DB, 'Durasi' dari DB jadi 'durasi')
-      const formattedData = sortedData.map(item => ({ // Menggunakan sortedData
-        id: item.id,
-        Durasi: item.durasi,
-        // Mengambil nilai 'segmen' (sudah diubah jadi jadwal_namaacara) dari JSON API dan menetapkannya ke properti 'Segmen'
-        Segmen: item.jadwal_namaacara,
-        Jenis: item.jenis
-      }));
       setProgramData(formattedData);
       setShowExampleScheduleNote(false);
       showNotificationModal('Jadwal berhasil dimuat dari database!');
@@ -116,7 +96,6 @@ function App() {
     }
   }, [showNotificationModal]);
 
-  // Gaya untuk tombol Pengaturan (didefinisikan di sini karena prop drilling)
   const settingsButtonStyle = {
     padding: '10px 18px',
     fontSize: '16px',
@@ -140,7 +119,6 @@ function App() {
   };
   const [isSettingsHovered, setIsSettingsHovered] = useState(false);
 
-  // NEW: Gaya untuk tombol Load Database
   const loadDbButtonStyle = {
     padding: '10px 18px',
     fontSize: '16px',
@@ -161,8 +139,6 @@ function App() {
   };
   const [isLoadDbHovered, setIsLoadDbHovered] = useState(false);
 
-
-  // Fungsi untuk menerapkan pengaturan Jam Mulai (dipanggil dari SettingsPage)
   const applySettings = useCallback((newStartTime) => {
     if (isValidTimeFormat(newStartTime)) {
       setStartTime(newStartTime);
@@ -173,7 +149,6 @@ function App() {
     }
   }, [navigate, showNotificationModal]);
 
-  // Fungsi untuk mengunggah file CSV (dipanggil dari SettingsPage)
   const handleCsvFileUpload = useCallback((event) => {
     const file = event.target.files[0];
     if (file) {
@@ -190,7 +165,6 @@ function App() {
     }
   }, [navigate, showNotificationModal]);
 
-  // Fungsi untuk mengunduh file CSV (dipanggil dari SettingsPage)
   const handleDownloadCsv = useCallback(() => {
     const csvContent = convertToCSV(programData);
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
@@ -205,7 +179,6 @@ function App() {
     showNotificationModal('Jadwal berhasil diunduh sebagai CSV!');
   }, [programData, showNotificationModal]);
 
-  // Handler untuk mengubah tema (dipanggil dari DisplaySettings)
   const handleThemeChange = useCallback((themeName) => {
     setCurrentTheme(themeName);
     showNotificationModal(`Tema berhasil diubah ke: ${themeName}`);

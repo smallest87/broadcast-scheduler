@@ -1,4 +1,5 @@
 /* src/index.css */
+@import './styles/theme-variables.css';
 
 body {
     font-family: Arial, sans-serif;
